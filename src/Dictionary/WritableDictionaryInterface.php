@@ -1,26 +1,10 @@
 <?php
 
-/**
- * This file is part of cyberspectrum/i18n.
- *
- * (c) 2018 CyberSpectrum.
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * This project is provided in good faith and hope to be usable by anyone.
- *
- * @package    cyberspectrum/i18n
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2018 CyberSpectrum.
- * @license    https://github.com/cyberspectrum/i18n/blob/master/LICENSE MIT
- * @filesource
- */
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace CyberSpectrum\I18N\Dictionary;
 
+use CyberSpectrum\I18N\Exception\NotSupportedException;
 use CyberSpectrum\I18N\Exception\TranslationAlreadyContainedException;
 use CyberSpectrum\I18N\Exception\TranslationNotFoundException;
 use CyberSpectrum\I18N\TranslationValue\WritableTranslationValueInterface;
@@ -38,6 +22,7 @@ interface WritableDictionaryInterface extends DictionaryInterface
      * @return WritableTranslationValueInterface
      *
      * @throws TranslationAlreadyContainedException When the key is already contained and the dictionary does not allow.
+     * @throws NotSupportedException When the key is in bad or unsupported format or adding is not supported.
      */
     public function add(string $key): WritableTranslationValueInterface;
 
@@ -49,6 +34,7 @@ interface WritableDictionaryInterface extends DictionaryInterface
      * @return void
      *
      * @throws TranslationNotFoundException When the key is not found.
+     * @throws NotSupportedException When the key is in bad or unsupported format or removing is not supported.
      */
     public function remove(string $key): void;
 
@@ -59,7 +45,8 @@ interface WritableDictionaryInterface extends DictionaryInterface
      *
      * @return WritableTranslationValueInterface
      *
+     * @throws NotSupportedException When the key is in bad or unsupported format.
      * @throws TranslationNotFoundException When the key is not found and the dictionary does not add automatically.
      */
-    public function getWritable($key): WritableTranslationValueInterface;
+    public function getWritable(string $key): WritableTranslationValueInterface;
 }

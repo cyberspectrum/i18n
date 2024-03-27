@@ -1,23 +1,6 @@
 <?php
 
-/**
- * This file is part of cyberspectrum/i18n.
- *
- * (c) 2018 CyberSpectrum.
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * This project is provided in good faith and hope to be usable by anyone.
- *
- * @package    cyberspectrum/i18n
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2018 CyberSpectrum.
- * @license    https://github.com/cyberspectrum/i18n/blob/master/LICENSE MIT
- * @filesource
- */
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace CyberSpectrum\I18N\Test\JobBuilder;
 
@@ -31,18 +14,9 @@ use CyberSpectrum\I18N\Job\TranslationJobInterface;
 use CyberSpectrum\I18N\JobBuilder\BatchJobBuilder;
 use PHPUnit\Framework\TestCase;
 
-/**
- * This tests the batch job builder.
- *
- * @covers \CyberSpectrum\I18N\JobBuilder\BatchJobBuilder
- */
+/** @covers \CyberSpectrum\I18N\JobBuilder\BatchJobBuilder */
 class BatchJobBuilderTest extends TestCase
 {
-    /**
-     * Test.
-     *
-     * @return void
-     */
     public function testBuild(): void
     {
         $builder = $this
@@ -56,21 +30,16 @@ class BatchJobBuilderTest extends TestCase
         $builder
             ->expects($this->exactly(2))
             ->method('createJob')
-            ->withConsecutive($child1, $child2)
+            ->withConsecutive([$child1], [$child2])
             ->willReturn($this->getMockForAbstractClass(TranslationJobInterface::class));
 
         $definition = new BatchJobDefinition('test', [$child1, $child2]);
 
         $instance = new BatchJobBuilder();
 
-        $this->assertInstanceOf(BatchJob::class, $instance->build($builder, $definition));
+        self::assertInstanceOf(BatchJob::class, $instance->build($builder, $definition));
     }
 
-    /**
-     * Test.
-     *
-     * @return void
-     */
     public function testBuildUnwrapsReferencedJobs(): void
     {
         $builder = $this
@@ -84,7 +53,7 @@ class BatchJobBuilderTest extends TestCase
         $builder
             ->expects($this->exactly(2))
             ->method('createJob')
-            ->withConsecutive($child1, $child2)
+            ->withConsecutive([$child1], [$child2])
             ->willReturn($this->getMockForAbstractClass(TranslationJobInterface::class));
 
         $configuration = new Configuration();
@@ -93,14 +62,9 @@ class BatchJobBuilderTest extends TestCase
         $definition = new ReferencedJobDefinition('test', $configuration);
         $instance   = new BatchJobBuilder();
 
-        $this->assertInstanceOf(BatchJob::class, $instance->build($builder, $definition));
+        self::assertInstanceOf(BatchJob::class, $instance->build($builder, $definition));
     }
 
-    /**
-     * Test.
-     *
-     * @return void
-     */
     public function testBuildThrowsForInvalid(): void
     {
         $builder = $this

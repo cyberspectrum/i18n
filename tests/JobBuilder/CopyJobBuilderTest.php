@@ -1,23 +1,6 @@
 <?php
 
-/**
- * This file is part of cyberspectrum/i18n.
- *
- * (c) 2018 CyberSpectrum.
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * This project is provided in good faith and hope to be usable by anyone.
- *
- * @package    cyberspectrum/i18n
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2018 CyberSpectrum.
- * @license    https://github.com/cyberspectrum/i18n/blob/master/LICENSE MIT
- * @filesource
- */
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace CyberSpectrum\I18N\Test\JobBuilder;
 
@@ -31,20 +14,12 @@ use CyberSpectrum\I18N\Dictionary\WritableDictionaryInterface;
 use CyberSpectrum\I18N\Job\CopyDictionaryJob;
 use CyberSpectrum\I18N\Job\JobFactory;
 use CyberSpectrum\I18N\JobBuilder\CopyJobBuilder;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
-/**
- * This tests the copy job builder.
- *
- * @covers \CyberSpectrum\I18N\JobBuilder\CopyJobBuilder
- */
+/** @covers \CyberSpectrum\I18N\JobBuilder\CopyJobBuilder */
 class CopyJobBuilderTest extends TestCase
 {
-    /**
-     * Test.
-     *
-     * @return void
-     */
     public function testBuild(): void
     {
         $builder = $this
@@ -70,19 +45,14 @@ class CopyJobBuilderTest extends TestCase
 
         $instance = new CopyJobBuilder();
 
-        $this->assertInstanceOf(CopyDictionaryJob::class, $job = $instance->build($builder, $definition));
+        self::assertInstanceOf(CopyDictionaryJob::class, $job = $instance->build($builder, $definition));
 
-        $this->assertSame(CopyDictionaryJob::COPY_IF_EMPTY, $job->getCopySource());
-        $this->assertSame(CopyDictionaryJob::COPY_IF_EMPTY, $job->getCopyTarget());
-        $this->assertFalse($job->hasRemoveObsolete());
-        $this->assertFalse($job->isDryRun());
+        self::assertSame(CopyDictionaryJob::COPY_IF_EMPTY, $job->getCopySource());
+        self::assertSame(CopyDictionaryJob::COPY_IF_EMPTY, $job->getCopyTarget());
+        self::assertFalse($job->hasRemoveObsolete());
+        self::assertFalse($job->isDryRun());
     }
 
-    /**
-     * Test.
-     *
-     * @return void
-     */
     public function testBuildWithOverrides(): void
     {
         $builder = $this
@@ -104,7 +74,7 @@ class CopyJobBuilderTest extends TestCase
             ->with($target)
             ->willReturn($this->getMockForAbstractClass(WritableDictionaryInterface::class));
 
-        $definition = new CopyJobDefinition( 'test', $source, $target, [
+        $definition = new CopyJobDefinition('test', $source, $target, [
             'copy-source'    => true,
             'copy-target'    => true,
             'remove-obsolete' => true,
@@ -112,19 +82,14 @@ class CopyJobBuilderTest extends TestCase
 
         $instance = new CopyJobBuilder();
 
-        $this->assertInstanceOf(CopyDictionaryJob::class, $job = $instance->build($builder, $definition));
+        self::assertInstanceOf(CopyDictionaryJob::class, $job = $instance->build($builder, $definition));
 
-        $this->assertSame(CopyDictionaryJob::COPY, $job->getCopySource());
-        $this->assertSame(CopyDictionaryJob::COPY, $job->getCopyTarget());
-        $this->assertTrue($job->hasRemoveObsolete());
-        $this->assertFalse($job->isDryRun());
+        self::assertSame(CopyDictionaryJob::COPY, $job->getCopySource());
+        self::assertSame(CopyDictionaryJob::COPY, $job->getCopyTarget());
+        self::assertTrue($job->hasRemoveObsolete());
+        self::assertFalse($job->isDryRun());
     }
 
-    /**
-     * Test.
-     *
-     * @return void
-     */
     public function testBuildUnwrapsReferencedJobs(): void
     {
         $builder = $this
@@ -147,7 +112,7 @@ class CopyJobBuilderTest extends TestCase
             ->willReturn($this->getMockForAbstractClass(WritableDictionaryInterface::class));
 
         $configuration = new Configuration();
-        $configuration->setJob(new CopyJobDefinition( 'test', $source, $target, [
+        $configuration->setJob(new CopyJobDefinition('test', $source, $target, [
             'copy-source'    => true,
             'copy-target'    => true,
             'remove-obsolete' => true,
@@ -156,19 +121,14 @@ class CopyJobBuilderTest extends TestCase
         $definition = new ReferencedJobDefinition('test', $configuration);
 
         $instance = new CopyJobBuilder();
-        $this->assertInstanceOf(CopyDictionaryJob::class, $job = $instance->build($builder, $definition));
+        self::assertInstanceOf(CopyDictionaryJob::class, $job = $instance->build($builder, $definition));
 
-        $this->assertSame(CopyDictionaryJob::COPY, $job->getCopySource());
-        $this->assertSame(CopyDictionaryJob::COPY, $job->getCopyTarget());
-        $this->assertTrue($job->hasRemoveObsolete());
-        $this->assertFalse($job->isDryRun());
+        self::assertSame(CopyDictionaryJob::COPY, $job->getCopySource());
+        self::assertSame(CopyDictionaryJob::COPY, $job->getCopyTarget());
+        self::assertTrue($job->hasRemoveObsolete());
+        self::assertFalse($job->isDryRun());
     }
 
-    /**
-     * Test.
-     *
-     * @return void
-     */
     public function testBuildThrowsForInvalid(): void
     {
         $builder = $this
@@ -184,7 +144,7 @@ class CopyJobBuilderTest extends TestCase
         $definition = new ReferencedJobDefinition('test', $configuration);
         $instance   = new CopyJobBuilder();
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid definition passed.');
 
         $instance->build($builder, $definition);
@@ -192,8 +152,6 @@ class CopyJobBuilderTest extends TestCase
 
     /**
      * Data provider for the flag conversion test.
-     *
-     * @return array
      */
     public function stringToFlagProvider(): array
     {
@@ -213,8 +171,6 @@ class CopyJobBuilderTest extends TestCase
      *
      * @param int   $expected The expected result.
      * @param mixed $input    The input value.
-     *
-     * @return void
      *
      * @dataProvider stringToFlagProvider
      */
@@ -239,22 +195,16 @@ class CopyJobBuilderTest extends TestCase
             ->with($target)
             ->willReturn($this->getMockForAbstractClass(WritableDictionaryInterface::class));
 
-        $definition = new CopyJobDefinition( 'test', $source, $target, ['copy-source' => $input]);
+        $definition = new CopyJobDefinition('test', $source, $target, ['copy-source' => $input]);
 
         $instance = new CopyJobBuilder();
 
-        $this->assertInstanceOf(CopyDictionaryJob::class, $job = $instance->build($builder, $definition));
+        self::assertInstanceOf(CopyDictionaryJob::class, $job = $instance->build($builder, $definition));
 
-        $this->assertSame($expected, $job->getCopySource());
+        self::assertSame($expected, $job->getCopySource());
     }
 
-    /**
-     * Test.
-     *
-     * @return void
-     *
-     * @dataProvider stringToFlagProvider
-     */
+    /** @dataProvider stringToFlagProvider */
     public function testInvalidStringToFlagThrows(): void
     {
         $builder = $this
@@ -276,21 +226,17 @@ class CopyJobBuilderTest extends TestCase
             ->with($target)
             ->willReturn($this->getMockForAbstractClass(WritableDictionaryInterface::class));
 
-        $definition = new CopyJobDefinition( 'test', $source, $target, ['copy-source' => 'invalid']);
+        $definition = new CopyJobDefinition('test', $source, $target, ['copy-source' => 'invalid']);
 
         $instance = new CopyJobBuilder();
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid value for copy flag.');
 
         $instance->build($builder, $definition);
     }
 
-    /**
-     * Data provider for the flag conversion test.
-     *
-     * @return array
-     */
+    /** Data provider for the flag conversion test. */
     public function boolishToFlagProvider(): array
     {
         return [
@@ -308,8 +254,6 @@ class CopyJobBuilderTest extends TestCase
      *
      * @param bool  $expected The expected result.
      * @param mixed $input    The input value.
-     *
-     * @return void
      *
      * @dataProvider boolishToFlagProvider
      */
@@ -334,22 +278,16 @@ class CopyJobBuilderTest extends TestCase
             ->with($target)
             ->willReturn($this->getMockForAbstractClass(WritableDictionaryInterface::class));
 
-        $definition = new CopyJobDefinition( 'test', $source, $target, ['remove-obsolete' => $input]);
+        $definition = new CopyJobDefinition('test', $source, $target, ['remove-obsolete' => $input]);
 
         $instance = new CopyJobBuilder();
 
-        $this->assertInstanceOf(CopyDictionaryJob::class, $job = $instance->build($builder, $definition));
+        self::assertInstanceOf(CopyDictionaryJob::class, $job = $instance->build($builder, $definition));
 
-        $this->assertSame($expected, $job->hasRemoveObsolete());
+        self::assertSame($expected, $job->hasRemoveObsolete());
     }
 
-    /**
-     * Test.
-     *
-     * @return void
-     *
-     * @dataProvider stringToFlagProvider
-     */
+    /** @dataProvider stringToFlagProvider */
     public function testInvalidSBoolishToFlagThrows(): void
     {
         $builder = $this
@@ -371,11 +309,11 @@ class CopyJobBuilderTest extends TestCase
             ->with($target)
             ->willReturn($this->getMockForAbstractClass(WritableDictionaryInterface::class));
 
-        $definition = new CopyJobDefinition( 'test', $source, $target, ['remove-obsolete' => 'invalid']);
+        $definition = new CopyJobDefinition('test', $source, $target, ['remove-obsolete' => 'invalid']);
 
         $instance = new CopyJobBuilder();
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid value for remove-obsolete flag.');
 
         $instance->build($builder, $definition);

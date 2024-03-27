@@ -1,43 +1,18 @@
 <?php
 
-/**
- * This file is part of cyberspectrum/i18n.
- *
- * (c) 2018 CyberSpectrum.
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * This project is provided in good faith and hope to be usable by anyone.
- *
- * @package    cyberspectrum/i18n
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2018 CyberSpectrum.
- * @license    https://github.com/cyberspectrum/i18n/blob/master/LICENSE MIT
- * @filesource
- */
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace CyberSpectrum\I18N\Test\Job;
 
 use CyberSpectrum\I18N\Memory\MemoryDictionary;
 use CyberSpectrum\I18N\Job\CopyDictionaryJob;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
-/**
- * This tests the translation copy class.
- *
- * @covers \CyberSpectrum\I18N\Job\CopyDictionaryJob
- */
+/** @covers \CyberSpectrum\I18N\Job\CopyDictionaryJob */
 class CopyDictionaryJobTest extends TestCase
 {
-    /**
-     * Test.
-     *
-     * @return void
-     */
     public function testCopyBoth(): void
     {
         $sourceDictionary = new MemoryDictionary('en', 'de', [
@@ -64,19 +39,14 @@ class CopyDictionaryJobTest extends TestCase
             ->run();
 
         $reader = $targetDictionary->get('test-key1');
-        $this->assertSame('Source 1', $reader->getSource());
-        $this->assertSame('Target 1', $reader->getTarget());
+        self::assertSame('Source 1', $reader->getSource());
+        self::assertSame('Target 1', $reader->getTarget());
 
         $reader = $targetDictionary->get('test-key2');
-        $this->assertSame('Source 2', $reader->getSource());
-        $this->assertSame('Target 2', $reader->getTarget());
+        self::assertSame('Source 2', $reader->getSource());
+        self::assertSame('Target 2', $reader->getTarget());
     }
 
-    /**
-     * Test.
-     *
-     * @return void
-     */
     public function testCopySource(): void
     {
         $sourceDictionary = new MemoryDictionary('en', 'de', [
@@ -103,19 +73,14 @@ class CopyDictionaryJobTest extends TestCase
             ->run();
 
         $reader = $targetDictionary->get('test-key1');
-        $this->assertSame('Source 1', $reader->getSource());
-        $this->assertSame('-old-value-', $reader->getTarget());
+        self::assertSame('Source 1', $reader->getSource());
+        self::assertSame('-old-value-', $reader->getTarget());
 
         $reader = $targetDictionary->get('test-key2');
-        $this->assertSame('Source 2', $reader->getSource());
-        $this->assertNull($reader->getTarget());
+        self::assertSame('Source 2', $reader->getSource());
+        self::assertNull($reader->getTarget());
     }
 
-    /**
-     * Test.
-     *
-     * @return void
-     */
     public function testCopyTarget(): void
     {
         $sourceDictionary = new MemoryDictionary('en', 'de', [
@@ -142,19 +107,14 @@ class CopyDictionaryJobTest extends TestCase
             ->run();
 
         $reader = $targetDictionary->get('test-key1');
-        $this->assertSame('-old-value-', $reader->getSource());
-        $this->assertSame('Target 1', $reader->getTarget());
+        self::assertSame('-old-value-', $reader->getSource());
+        self::assertSame('Target 1', $reader->getTarget());
 
         $reader = $targetDictionary->get('test-key2');
-        $this->assertNull($reader->getSource());
-        $this->assertSame('Target 2', $reader->getTarget());
+        self::assertNull($reader->getSource());
+        self::assertSame('Target 2', $reader->getTarget());
     }
 
-    /**
-     * Test.
-     *
-     * @return void
-     */
     public function testCopyIfEmpty(): void
     {
         $sourceDictionary = new MemoryDictionary('en', 'de', [
@@ -189,23 +149,18 @@ class CopyDictionaryJobTest extends TestCase
             ->run();
 
         $reader = $targetDictionary->get('test-key1');
-        $this->assertSame('-old-value-', $reader->getSource());
-        $this->assertSame('-old-value-', $reader->getTarget());
+        self::assertSame('-old-value-', $reader->getSource());
+        self::assertSame('-old-value-', $reader->getTarget());
 
         $reader = $targetDictionary->get('test-key2');
-        $this->assertSame('Source 2', $reader->getSource());
-        $this->assertSame('Target 2', $reader->getTarget());
+        self::assertSame('Source 2', $reader->getSource());
+        self::assertSame('Target 2', $reader->getTarget());
 
         $reader = $targetDictionary->get('test-key3');
-        $this->assertSame('Source 3', $reader->getSource());
-        $this->assertSame('Target 3', $reader->getTarget());
+        self::assertSame('Source 3', $reader->getSource());
+        self::assertSame('Target 3', $reader->getTarget());
     }
 
-    /**
-     * Test.
-     *
-     * @return void
-     */
     public function testRemoveObsolete(): void
     {
         $sourceDictionary = new MemoryDictionary('en', 'de', [
@@ -233,17 +188,12 @@ class CopyDictionaryJobTest extends TestCase
             ->run();
 
         $reader = $targetDictionary->get('test-key1');
-        $this->assertSame('Source 1', $reader->getSource());
-        $this->assertSame('Target 1', $reader->getTarget());
+        self::assertSame('Source 1', $reader->getSource());
+        self::assertSame('Target 1', $reader->getTarget());
 
-        $this->assertFalse($targetDictionary->has('test-key2'));
+        self::assertFalse($targetDictionary->has('test-key2'));
     }
 
-    /**
-     * Test.
-     *
-     * @return void
-     */
     public function testDryRunDoesNothing(): void
     {
         $sourceDictionary = new MemoryDictionary('en', 'de', [
@@ -276,18 +226,18 @@ class CopyDictionaryJobTest extends TestCase
             ->run();
 
         $reader = $targetDictionary->get('test-key1');
-        $this->assertSame('-old-value-', $reader->getSource());
-        $this->assertSame('-old-value-', $reader->getTarget());
+        self::assertSame('-old-value-', $reader->getSource());
+        self::assertSame('-old-value-', $reader->getTarget());
         $reader = $targetDictionary->get('test-key2');
-        $this->assertSame('Source 2', $reader->getSource());
-        $this->assertSame('Target 2', $reader->getTarget());
-        $this->assertFalse($targetDictionary->has('test-key3'));
+        self::assertSame('Source 2', $reader->getSource());
+        self::assertSame('Target 2', $reader->getTarget());
+        self::assertFalse($targetDictionary->has('test-key3'));
     }
 
     /**
      * Mock a logger.
      *
-     * @return \PHPUnit\Framework\MockObject\MockObject|LoggerInterface
+     * @return MockObject|LoggerInterface
      */
     private function mockLogger()
     {

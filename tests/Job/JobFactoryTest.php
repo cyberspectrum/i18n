@@ -1,23 +1,6 @@
 <?php
 
-/**
- * This file is part of cyberspectrum/i18n.
- *
- * (c) 2018 CyberSpectrum.
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * This project is provided in good faith and hope to be usable by anyone.
- *
- * @package    cyberspectrum/i18n
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2018 CyberSpectrum.
- * @license    https://github.com/cyberspectrum/i18n/blob/master/LICENSE MIT
- * @filesource
- */
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace CyberSpectrum\I18N\Test\Job;
 
@@ -33,19 +16,11 @@ use CyberSpectrum\I18N\JobBuilder\JobBuilderInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ServiceLocator;
+use UnexpectedValueException;
 
-/**
- * This tests the job builder factory.
- *
- * @covers \CyberSpectrum\I18N\Job\JobFactory
- */
+/** @covers \CyberSpectrum\I18N\Job\JobFactory */
 class JobFactoryTest extends TestCase
 {
-    /**
-     * Test.
-     *
-     * @return void
-     */
     public function testGetJobNames(): void
     {
         $dictionaryBuilders = $this->getMockBuilder(ServiceLocator::class)->disableOriginalConstructor()->getMock();
@@ -56,14 +31,9 @@ class JobFactoryTest extends TestCase
 
         $configuration->setJob(new Definition('job', ['type' => 'test']));
 
-        $this->assertSame(['job'], $jobBuilder->getJobNames());
+        self::assertSame(['job'], $jobBuilder->getJobNames());
     }
 
-    /**
-     * Test.
-     *
-     * @return void
-     */
     public function testThrowsForUnknownJob(): void
     {
         $dictionaryBuilders = new ServiceLocator([]);
@@ -73,17 +43,12 @@ class JobFactoryTest extends TestCase
 
         $instance = new JobFactory($dictionaryBuilders, $jobBuilders, $configuration, $logger);
 
-        $this->expectException(\UnexpectedValueException::class);
+        $this->expectException(UnexpectedValueException::class);
         $this->expectExceptionMessage('Job "job" not found in configuration');
 
         $instance->createJobByName('job');
     }
 
-    /**
-     * Test.
-     *
-     * @return void
-     */
     public function testThrowsForUnknownJobType(): void
     {
         $dictionaryBuilders = new ServiceLocator([]);
@@ -96,17 +61,12 @@ class JobFactoryTest extends TestCase
 
         $instance = new JobFactory($dictionaryBuilders, $jobBuilders, $configuration, $logger);
 
-        $this->expectException(\UnexpectedValueException::class);
-        $this->expectExceptionMessage('Unknown job type "test"');
+        $this->expectException(UnexpectedValueException::class);
+        $this->expectExceptionMessage('Unknown job type \'test\'');
 
         $instance->createJobByName('job');
     }
 
-    /**
-     * Test.
-     *
-     * @return void
-     */
     public function testGetJob(): void
     {
         $jobBuilder         = $this->getMockForAbstractClass(JobBuilderInterface::class);
@@ -125,14 +85,9 @@ class JobFactoryTest extends TestCase
         $instance = new JobFactory($dictionaryBuilders, $jobBuilders, $configuration, $logger);
         $jobBuilder->expects($this->once())->method('build')->with($instance, $jobDefinition)->willReturn($job);
 
-        $this->assertSame($job, $instance->createJobByName('job'));
+        self::assertSame($job, $instance->createJobByName('job'));
     }
 
-    /**
-     * Test.
-     *
-     * @return void
-     */
     public function testGetDictionary(): void
     {
         $dictionaryBuilder  = $this->getMockForAbstractClass(DictionaryBuilderInterface::class);
@@ -161,14 +116,9 @@ class JobFactoryTest extends TestCase
             ->with($instance, $definition)
             ->willReturn($dictionary);
 
-        $this->assertSame($dictionary, $instance->createDictionary($definition));
+        self::assertSame($dictionary, $instance->createDictionary($definition));
     }
 
-    /**
-     * Test.
-     *
-     * @return void
-     */
     public function testGetDictionaryWillFallBackToDefaultOnUnknownType(): void
     {
         $dictionaryBuilder  = $this->getMockForAbstractClass(DictionaryBuilderInterface::class);
@@ -197,14 +147,9 @@ class JobFactoryTest extends TestCase
             ->with($instance, $definition)
             ->willReturn($dictionary);
 
-        $this->assertSame($dictionary, $instance->createDictionary($definition));
+        self::assertSame($dictionary, $instance->createDictionary($definition));
     }
 
-    /**
-     * Test.
-     *
-     * @return void
-     */
     public function testGetDictionaryForWrite(): void
     {
         $dictionaryBuilder  = $this->getMockForAbstractClass(DictionaryBuilderInterface::class);
@@ -233,6 +178,6 @@ class JobFactoryTest extends TestCase
             ->with($instance, $definition)
             ->willReturn($dictionary);
 
-        $this->assertSame($dictionary, $instance->createWritableDictionary($definition));
+        self::assertSame($dictionary, $instance->createWritableDictionary($definition));
     }
 }

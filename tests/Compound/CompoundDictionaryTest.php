@@ -1,23 +1,6 @@
 <?php
 
-/**
- * This file is part of cyberspectrum/i18n.
- *
- * (c) 2018 CyberSpectrum.
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * This project is provided in good faith and hope to be usable by anyone.
- *
- * @package    cyberspectrum/i18n
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2018 CyberSpectrum.
- * @license    https://github.com/cyberspectrum/i18n/blob/master/LICENSE MIT
- * @filesource
- */
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace CyberSpectrum\I18N\Test\Compound;
 
@@ -28,33 +11,23 @@ use CyberSpectrum\I18N\Exception\NotSupportedException;
 use CyberSpectrum\I18N\Exception\TranslationNotFoundException;
 use CyberSpectrum\I18N\Memory\MemoryDictionary;
 use CyberSpectrum\I18N\TranslationValue\TranslationValueInterface;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
-/**
- * This tests the configuration resolver.
- *
- * @covers \CyberSpectrum\I18N\Compound\CompoundDictionary
- */
+use function iterator_to_array;
+
+/** @covers \CyberSpectrum\I18N\Compound\CompoundDictionary */
 class CompoundDictionaryTest extends TestCase
 {
-    /**
-     * Test.
-     *
-     * @return void
-     */
     public function testLanguages(): void
     {
         $compound = new CompoundDictionary('en', 'de');
 
-        $this->assertSame('en', $compound->getSourceLanguage());
-        $this->assertSame('de', $compound->getTargetLanguage());
+        self::assertSame('en', $compound->getSourceLanguage());
+        self::assertSame('de', $compound->getTargetLanguage());
     }
 
-    /**
-     * Test.
-     *
-     * @return void
-     */
     public function testAddChecksSourceLanguage(): void
     {
         $compound = new CompoundDictionary('en', 'de');
@@ -68,11 +41,6 @@ class CompoundDictionaryTest extends TestCase
         $compound->addDictionary('child', $child);
     }
 
-    /**
-     * Test.
-     *
-     * @return void
-     */
     public function testAddChecksTargetLanguage(): void
     {
         $compound = new CompoundDictionary('en', 'fr');
@@ -87,11 +55,6 @@ class CompoundDictionaryTest extends TestCase
         $compound->addDictionary('child', $child);
     }
 
-    /**
-     * Test.
-     *
-     * @return void
-     */
     public function testCanNotAddTwice(): void
     {
         $compound = new CompoundDictionary('en', 'de');
@@ -106,17 +69,12 @@ class CompoundDictionaryTest extends TestCase
         $child2->expects($this->never())->method('getSourceLanguage');
         $child2->expects($this->never())->method('getTargetLanguage');
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('A dictionary with prefix "child" has already been added.');
 
         $compound->addDictionary('child', $child2);
     }
 
-    /**
-     * Test.
-     *
-     * @return void
-     */
     public function testKeysReturnsAll(): void
     {
         $child1 = new MemoryDictionary('en', 'de', [
@@ -144,19 +102,14 @@ class CompoundDictionaryTest extends TestCase
         $compound->addDictionary('child1', $child1);
         $compound->addDictionary('child2', $child2);
 
-        $this->assertSame([
+        self::assertSame([
             'child1.test-key1',
             'child1.test-key2',
             'child2.test-key1',
             'child2.test-key2'
-        ], \iterator_to_array($compound->keys()));
+        ], iterator_to_array($compound->keys()));
     }
 
-    /**
-     * Test.
-     *
-     * @return void
-     */
     public function testHas(): void
     {
         $child = $this->getMockForAbstractClass(DictionaryInterface::class);
@@ -167,14 +120,9 @@ class CompoundDictionaryTest extends TestCase
         $compound = new CompoundDictionary('en', 'de');
         $compound->addDictionary('child', $child);
 
-        $this->assertTrue($compound->has('child.key'));
+        self::assertTrue($compound->has('child.key'));
     }
 
-    /**
-     * Test.
-     *
-     * @return void
-     */
     public function testGet(): void
     {
         $value = $this->getMockForAbstractClass(TranslationValueInterface::class);
@@ -193,19 +141,14 @@ class CompoundDictionaryTest extends TestCase
         $compound->addDictionary('child', $child);
 
         $childValue = $compound->get('child.key');
-        $this->assertInstanceOf(TranslationValue::class, $childValue);
-        $this->assertSame('child.key', $childValue->getKey());
-        $this->assertSame('source', $childValue->getSource());
-        $this->assertSame('target', $childValue->getTarget());
-        $this->assertFalse($childValue->isSourceEmpty());
-        $this->assertFalse($childValue->isTargetEmpty());
+        self::assertInstanceOf(TranslationValue::class, $childValue);
+        self::assertSame('child.key', $childValue->getKey());
+        self::assertSame('source', $childValue->getSource());
+        self::assertSame('target', $childValue->getTarget());
+        self::assertFalse($childValue->isSourceEmpty());
+        self::assertFalse($childValue->isTargetEmpty());
     }
 
-    /**
-     * Test.
-     *
-     * @return void
-     */
     public function testThrowsForInvalidKey(): void
     {
         $child = $this->getMockForAbstractClass(DictionaryInterface::class);
@@ -216,17 +159,12 @@ class CompoundDictionaryTest extends TestCase
         $compound = new CompoundDictionary('en', 'de');
         $compound->addDictionary('child', $child);
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Key "key" has invalid format.');
 
         $compound->has('key');
     }
 
-    /**
-     * Test.
-     *
-     * @return void
-     */
     public function testThrowsForUnknownPrefix(): void
     {
         $child = $this->getMockForAbstractClass(DictionaryInterface::class);

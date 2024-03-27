@@ -1,25 +1,12 @@
 <?php
 
-/**
- * This file is part of cyberspectrum/i18n.
- *
- * (c) 2018 CyberSpectrum.
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * This project is provided in good faith and hope to be usable by anyone.
- *
- * @package    cyberspectrum/i18n
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2018 CyberSpectrum.
- * @license    https://github.com/cyberspectrum/i18n/blob/master/LICENSE MIT
- * @filesource
- */
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace CyberSpectrum\I18N\Dictionary;
+
+use CyberSpectrum\I18N\Exception\DictionaryNotFoundException;
+use InvalidArgumentException;
+use Traversable;
 
 /**
  * This interface describes a dictionary provider for writable dictionaries.
@@ -29,19 +16,22 @@ interface WritableDictionaryProviderInterface
     /**
      * Obtain the list of available dictionary names.
      *
-     * @return \Traversable|DictionaryInformation[]
+     * @return Traversable<int, DictionaryInformation>
      */
-    public function getAvailableWritableDictionaries(): \Traversable;
+    public function getAvailableWritableDictionaries(): Traversable;
 
     /**
      * Obtain a dictionary by name.
      *
-     * @param string $name           The dictionary name.
-     * @param string $sourceLanguage The source language.
-     * @param string $targetLanguage The target language.
-     * @param array  $customData     Custom data for initialization - nature is subject to the implementation.
+     * @param string               $name           The dictionary name.
+     * @param string               $sourceLanguage The source language.
+     * @param string               $targetLanguage The target language.
+     * @param array<string, mixed> $customData     Custom data for initialization -
+     *                                             structure is subject to the implementation.
      *
      * @return WritableDictionaryInterface
+     *
+     * @throws DictionaryNotFoundException When the dictionary has not been created.
      */
     public function getDictionaryForWrite(
         string $name,
@@ -53,12 +43,15 @@ interface WritableDictionaryProviderInterface
     /**
      * Create a dictionary with the given name.
      *
-     * @param string $name           The dictionary name.
-     * @param string $sourceLanguage The source language.
-     * @param string $targetLanguage The target language.
-     * @param array  $customData     Custom data for initialization - nature is subject to the implementation.
+     * @param string               $name           The dictionary name.
+     * @param string               $sourceLanguage The source language.
+     * @param string               $targetLanguage The target language.
+     * @param array<string, mixed> $customData     Custom data for initialization -
+     *                                             structure is subject to the implementation.
      *
      * @return WritableDictionaryInterface
+     *
+     * @throws InvalidArgumentException When the dictionary has already been created.
      */
     public function createDictionary(
         string $name,

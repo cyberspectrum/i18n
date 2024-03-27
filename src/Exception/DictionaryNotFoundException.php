@@ -1,23 +1,6 @@
 <?php
 
-/**
- * This file is part of cyberspectrum/i18n.
- *
- * (c) 2018 CyberSpectrum.
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * This project is provided in good faith and hope to be usable by anyone.
- *
- * @package    cyberspectrum/i18n
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2018 CyberSpectrum.
- * @license    https://github.com/cyberspectrum/i18n/blob/master/LICENSE MIT
- * @filesource
- */
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace CyberSpectrum\I18N\Exception;
 
@@ -26,26 +9,14 @@ namespace CyberSpectrum\I18N\Exception;
  */
 class DictionaryNotFoundException extends \RuntimeException
 {
-    /**
-     * The name of the dictionary.
-     *
-     * @var string
-     */
-    private $name;
+    /** The name of the dictionary. */
+    private string $name;
 
-    /**
-     * The source language.
-     *
-     * @var string
-     */
-    private $sourceLanguage;
+    /** The source language. */
+    private string $sourceLanguage;
 
-    /**
-     * The target language.
-     *
-     * @var string
-     */
-    private $targetLanguage;
+    /** The target language. */
+    private string $targetLanguage;
 
     /**
      * Create a new instance.
@@ -67,31 +38,19 @@ class DictionaryNotFoundException extends \RuntimeException
         ));
     }
 
-    /**
-     * Retrieve name.
-     *
-     * @return string
-     */
+    /** Retrieve name. */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * Retrieve sourceLanguage.
-     *
-     * @return string
-     */
+    /** Retrieve sourceLanguage. */
     public function getSourceLanguage(): string
     {
         return $this->sourceLanguage;
     }
 
-    /**
-     * Retrieve targetLanguage.
-     *
-     * @return string
-     */
+    /** Retrieve targetLanguage. */
     public function getTargetLanguage(): string
     {
         return $this->targetLanguage;

@@ -1,23 +1,6 @@
 <?php
 
-/**
- * This file is part of cyberspectrum/i18n.
- *
- * (c) 2018 CyberSpectrum.
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * This project is provided in good faith and hope to be usable by anyone.
- *
- * @package    cyberspectrum/i18n
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2018 CyberSpectrum.
- * @license    https://github.com/cyberspectrum/i18n/blob/master/LICENSE MIT
- * @filesource
- */
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace CyberSpectrum\I18N\Job;
 
@@ -30,26 +13,14 @@ use Symfony\Component\DependencyInjection\ServiceLocator;
  */
 class JobFactoryFactory
 {
-    /**
-     * The dictionary providers.
-     *
-     * @var ServiceLocator
-     */
-    private $dictionaryBuilders;
+    /** The dictionary providers. */
+    private ServiceLocator $dictionaryBuilders;
 
-    /**
-     * The job type factories.
-     *
-     * @var ServiceLocator
-     */
-    private $jobBuilders;
+    /** The job type factories. */
+    private ServiceLocator $jobBuilders;
 
-    /**
-     * The logger.
-     *
-     * @var LoggerInterface
-     */
-    private $logger;
+    /** The logger. */
+    private LoggerInterface $logger;
 
     /**
      * Create a new instance.
@@ -72,10 +43,6 @@ class JobFactoryFactory
      * Process a configuration.
      *
      * @param Configuration $configuration The configuration to process.
-     *
-     * @return JobFactory
-     *
-     * @throws \InvalidArgumentException When the type is unknown.
      */
     public function create(Configuration $configuration): JobFactory
     {

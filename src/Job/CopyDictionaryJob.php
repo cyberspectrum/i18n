@@ -1,23 +1,6 @@
 <?php
 
-/**
- * This file is part of cyberspectrum/i18n.
- *
- * (c) 2018 CyberSpectrum.
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * This project is provided in good faith and hope to be usable by anyone.
- *
- * @package    cyberspectrum/i18n
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2018 CyberSpectrum.
- * @license    https://github.com/cyberspectrum/i18n/blob/master/LICENSE MIT
- * @filesource
- */
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace CyberSpectrum\I18N\Job;
 
@@ -25,89 +8,59 @@ use CyberSpectrum\I18N\Dictionary\DictionaryInterface;
 use CyberSpectrum\I18N\Dictionary\WritableDictionaryInterface;
 use CyberSpectrum\I18N\TranslationValue\TranslationValueInterface;
 use CyberSpectrum\I18N\TranslationValue\WritableTranslationValueInterface;
+use InvalidArgumentException;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
-use Psr\Log\NullLogger;
+use RuntimeException;
+use Throwable;
 
 /**
  * This copies the translations from one dictionary to another one.
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class CopyDictionaryJob implements TranslationJobInterface, LoggerAwareInterface
+final class CopyDictionaryJob implements TranslationJobInterface, LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
-    /**
-     * Do not copy.
-     */
+    /** Do not copy. */
     public const DO_NOT_COPY = 0;
 
-    /**
-     * Copy values.
-     */
+    /** Copy values. */
     public const COPY = 1;
 
-    /**
-     * Copy if empty.
-     */
+    /** Copy if empty. */
     public const COPY_IF_EMPTY = 2;
 
-    /**
-     * The source dictionary.
-     *
-     * @var DictionaryInterface
-     */
-    private $sourceDictionary;
+    /** The source dictionary. */
+    private DictionaryInterface $sourceDictionary;
 
-    /**
-     * The target dictionary.
-     *
-     * @var WritableDictionaryInterface
-     */
-    private $targetDictionary;
+    /** The target dictionary. */
+    private WritableDictionaryInterface $targetDictionary;
 
-    /**
-     * Flag if the source value shall be copied/updated.
-     *
-     * @var int
-     */
-    private $copySource = self::COPY_IF_EMPTY;
+    /** Flag if the source value shall be copied/updated. */
+    private int $copySource = self::COPY_IF_EMPTY;
 
-    /**
-     * Flag if the target value shall be copied/updated.
-     *
-     * @var int
-     */
-    private $copyTarget = self::COPY_IF_EMPTY;
+    /** Flag if the target value shall be copied/updated. */
+    private int $copyTarget = self::COPY_IF_EMPTY;
 
-    /**
-     * Flag if obsolete keys shall be removed.
-     *
-     * @var bool
-     */
-    private $removeObsolete = false;
+    /** Flag if obsolete keys shall be removed. */
+    private bool $removeObsolete = false;
 
-    /**
-     * Flag if this is a dry run (false => update target, true => log updates with level notice).
-     *
-     * @var bool
-     */
-    private $dryRun = false;
+    /** Flag if this is a dry run (false => update target, true => log updates with level notice). */
+    private bool $dryRun = false;
 
-    /**
-     * The log level to use for informal messages.
-     *
-     * @var string
-     */
-    private $logLevel;
+    /**  The log level to use for informal messages. */
+    private string $logLevel;
 
     /**
      * The regular expressions to filter.
      *
-     * @var string[]
+     * @var list<string>
      */
-    private $filters = [];
+    private array $filters = [];
 
     /**
      * Create a new instance.
@@ -121,7 +74,8 @@ class CopyDictionaryJob implements TranslationJobInterface, LoggerAwareInterface
     ) {
         $this->sourceDictionary = $sourceDictionary;
         $this->targetDictionary = $targetDictionary;
-        $this->logger           = new NullLogger();
+        $this->logger           = null;
+        $this->logLevel         = LogLevel::DEBUG;
     }
 
     /**
@@ -130,15 +84,13 @@ class CopyDictionaryJob implements TranslationJobInterface, LoggerAwareInterface
      * @param DictionaryInterface         $sourceDictionary The source dictionary.
      * @param WritableDictionaryInterface $targetDictionary The target dictionary.
      * @param LoggerInterface|null        $logger           The logger to use.
-     *
-     * @return CopyDictionaryJob
      */
     public static function create(
         DictionaryInterface $sourceDictionary,
         WritableDictionaryInterface $targetDictionary,
         LoggerInterface $logger = null
     ): CopyDictionaryJob {
-        $instance = new static($sourceDictionary, $targetDictionary);
+        $instance = new self($sourceDictionary, $targetDictionary);
         if ($logger) {
             $instance->setLogger($logger);
         }
@@ -146,13 +98,7 @@ class CopyDictionaryJob implements TranslationJobInterface, LoggerAwareInterface
         return $instance;
     }
 
-    /**
-     * Set copySource.
-     *
-     * @param int $copySource The new value.
-     *
-     * @return CopyDictionaryJob
-     */
+    /** Set copy source flag. */
     public function setCopySource(int $copySource = self::COPY): CopyDictionaryJob
     {
         $this->copySource = $copySource;
@@ -160,23 +106,13 @@ class CopyDictionaryJob implements TranslationJobInterface, LoggerAwareInterface
         return $this;
     }
 
-    /**
-     * Retrieve copy source flag.
-     *
-     * @return int
-     */
+    /** Retrieve copy source flag. */
     public function getCopySource(): int
     {
         return $this->copySource;
     }
 
-    /**
-     * Set copyTarget.
-     *
-     * @param int $copyTarget The new value.
-     *
-     * @return CopyDictionaryJob
-     */
+    /** Set copy target flag. */
     public function setCopyTarget(int $copyTarget = self::COPY): CopyDictionaryJob
     {
         $this->copyTarget = $copyTarget;
@@ -184,23 +120,13 @@ class CopyDictionaryJob implements TranslationJobInterface, LoggerAwareInterface
         return $this;
     }
 
-    /**
-     * Retrieve copy target flag.
-     *
-     * @return int
-     */
+    /** Retrieve copy target flag. */
     public function getCopyTarget(): int
     {
         return $this->copyTarget;
     }
 
-    /**
-     * Set removeObsolete.
-     *
-     * @param bool $removeObsolete The new value (defaults to true).
-     *
-     * @return CopyDictionaryJob
-     */
+    /** Set remove obsolete flag. */
     public function setRemoveObsolete(bool $removeObsolete = true): CopyDictionaryJob
     {
         $this->removeObsolete = $removeObsolete;
@@ -208,23 +134,13 @@ class CopyDictionaryJob implements TranslationJobInterface, LoggerAwareInterface
         return $this;
     }
 
-    /**
-     * Retrieve remove obsolete flag.
-     *
-     * @return bool
-     */
+    /** Retrieve remove obsolete flag. */
     public function hasRemoveObsolete(): bool
     {
         return $this->removeObsolete;
     }
 
-    /**
-     * Set dryRun.
-     *
-     * @param bool $dryRun The new value.
-     *
-     * @return CopyDictionaryJob
-     */
+    /** Set dry run flag. */
     public function setDryRun(bool $dryRun = true): CopyDictionaryJob
     {
         $this->dryRun = $dryRun;
@@ -232,11 +148,7 @@ class CopyDictionaryJob implements TranslationJobInterface, LoggerAwareInterface
         return $this;
     }
 
-    /**
-     * Retrieve dry run flag.
-     *
-     * @return bool
-     */
+    /** Retrieve dry run flag. */
     public function isDryRun(): bool
     {
         return $this->dryRun;
@@ -249,7 +161,7 @@ class CopyDictionaryJob implements TranslationJobInterface, LoggerAwareInterface
      *
      * @return CopyDictionaryJob
      *
-     * @throws \InvalidArgumentException When the regex is invalid.
+     * @throws InvalidArgumentException When the regex is invalid.
      */
     public function addFilter(string $expression): CopyDictionaryJob
     {
@@ -260,9 +172,20 @@ class CopyDictionaryJob implements TranslationJobInterface, LoggerAwareInterface
 
         // Test if the regex is valid.
         try {
-            preg_match($expression, '');
-        } catch (\Throwable $error) {
-            throw new \InvalidArgumentException(
+            if (false === preg_match($expression, '')) {
+                $error = preg_last_error();
+                throw new RuntimeException([
+                    PREG_NO_ERROR => 'PREG_NO_ERROR',
+                    PREG_INTERNAL_ERROR => 'PREG_INTERNAL_ERROR',
+                    PREG_BACKTRACK_LIMIT_ERROR => 'PREG_BACKTRACK_LIMIT_ERROR',
+                    PREG_RECURSION_LIMIT_ERROR => 'PREG_RECURSION_LIMIT_ERROR',
+                    PREG_BAD_UTF8_ERROR => 'PREG_BAD_UTF8_ERROR',
+                    PREG_BAD_UTF8_OFFSET_ERROR => 'PREG_BAD_UTF8_OFFSET_ERROR',
+                    PREG_JIT_STACKLIMIT_ERROR => 'PREG_JIT_STACKLIMIT_ERROR',
+                ][$error], preg_last_error());
+            }
+        } catch (Throwable $error) {
+            throw new InvalidArgumentException(
                 sprintf('Filter "%s" is not a valid regular expression - Error: %s', $expression, $error->getMessage()),
                 0,
                 $error
@@ -274,14 +197,8 @@ class CopyDictionaryJob implements TranslationJobInterface, LoggerAwareInterface
         return $this;
     }
 
-    /**
-     * Set the filter expressions.
-     *
-     * @param array $expressions
-     *
-     * @return CopyDictionaryJob
-     */
-    public function setFilters(array $expressions): CopyDictionaryJob
+    /** Set the filter expressions. */
+    public function setFilters(string ...$expressions): CopyDictionaryJob
     {
         $this->filters = [];
         foreach ($expressions as $expression) {
@@ -294,16 +211,13 @@ class CopyDictionaryJob implements TranslationJobInterface, LoggerAwareInterface
     /**
      * Obtain the regular expressions.
      *
-     * @return string[]
+     * @return list<string>
      */
     public function getFilters(): array
     {
         return $this->filters;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function run(bool $dryRun = null): void
     {
         $prevDry = $this->dryRun;
@@ -333,14 +247,13 @@ class CopyDictionaryJob implements TranslationJobInterface, LoggerAwareInterface
      * Copy a key.
      *
      * @param string $key The key.
-     *
-     * @return void
      */
     private function copyKey(string $key): void
     {
         $source = $this->sourceDictionary->get($key);
         if ($source->isSourceEmpty()) {
-            $this->logger->debug(
+            $this->log(
+                LogLevel::DEBUG,
                 '{key}: Is empty in source language and therefore skipped.',
                 ['key' => $key]
             );
@@ -348,7 +261,7 @@ class CopyDictionaryJob implements TranslationJobInterface, LoggerAwareInterface
         }
 
         if (!$this->targetDictionary->has($key)) {
-            $this->logger->log($this->logLevel, 'Adding key {key}.', ['key' => $key]);
+            $this->log($this->logLevel, 'Adding key {key}.', ['key' => $key]);
             if ($this->dryRun) {
                 return;
             }
@@ -366,8 +279,6 @@ class CopyDictionaryJob implements TranslationJobInterface, LoggerAwareInterface
      *
      * @param TranslationValueInterface         $source The source value.
      * @param WritableTranslationValueInterface $target The target value.
-     *
-     * @return void
      */
     private function copySource(TranslationValueInterface $source, WritableTranslationValueInterface $target): void
     {
@@ -376,7 +287,7 @@ class CopyDictionaryJob implements TranslationJobInterface, LoggerAwareInterface
         }
 
         if (($oldValue = $target->getSource()) === ($newValue = $source->getSource())) {
-            $this->logger->log(
+            $this->log(
                 $this->logLevel,
                 '{key}: Source is same, no need to update.',
                 ['key' => $target->getKey(), 'old' => $oldValue, 'new' => $newValue]
@@ -385,7 +296,7 @@ class CopyDictionaryJob implements TranslationJobInterface, LoggerAwareInterface
         }
 
         if ((self::COPY_IF_EMPTY === $this->copySource) && !$target->isSourceEmpty()) {
-            $this->logger->log(
+            $this->log(
                 $this->logLevel,
                 '{key}: Source is not empty, no need to update.',
                 ['key' => $target->getKey(), 'old' => $oldValue, 'new' => $newValue]
@@ -394,7 +305,7 @@ class CopyDictionaryJob implements TranslationJobInterface, LoggerAwareInterface
             return;
         }
 
-        $this->logger->log(
+        $this->log(
             LogLevel::NOTICE,
             '{key}: Updating source value.',
             ['key' => $target->getKey(), 'old' => $oldValue, 'new' => $newValue]
@@ -404,6 +315,10 @@ class CopyDictionaryJob implements TranslationJobInterface, LoggerAwareInterface
             return;
         }
 
+        if (null === $newValue) {
+            $target->clearSource();
+            return;
+        }
         $target->setSource($newValue);
     }
 
@@ -412,8 +327,6 @@ class CopyDictionaryJob implements TranslationJobInterface, LoggerAwareInterface
      *
      * @param TranslationValueInterface         $source The source value.
      * @param WritableTranslationValueInterface $target The target value.
-     *
-     * @return void
      */
     private function copyTarget(TranslationValueInterface $source, WritableTranslationValueInterface $target): void
     {
@@ -421,10 +334,11 @@ class CopyDictionaryJob implements TranslationJobInterface, LoggerAwareInterface
             return;
         }
 
-        if ((($oldValue = $target->getTarget()) === ($newValue = $source->getTarget()))
+        if (
+            (($oldValue = $target->getTarget()) === ($newValue = $source->getTarget()))
             || ($target->isTargetEmpty() && $source->isTargetEmpty())
         ) {
-            $this->logger->log(
+            $this->log(
                 $this->logLevel,
                 '{key}: Target is same, no need to update.',
                 ['key' => $target->getKey(), 'old' => $oldValue, 'new' => $newValue]
@@ -433,7 +347,7 @@ class CopyDictionaryJob implements TranslationJobInterface, LoggerAwareInterface
         }
 
         if ((self::COPY_IF_EMPTY === $this->copyTarget) && !$target->isTargetEmpty()) {
-            $this->logger->log(
+            $this->log(
                 $this->logLevel,
                 '{key}: Target is not empty, no need to update.',
                 ['key' => $target->getKey(), 'old' => $oldValue, 'new' => $newValue]
@@ -442,7 +356,7 @@ class CopyDictionaryJob implements TranslationJobInterface, LoggerAwareInterface
             return;
         }
 
-        $this->logger->log(
+        $this->log(
             LogLevel::NOTICE,
             '{key}: Updating target value.',
             ['key' => $target->getKey(), 'old' => $oldValue, 'new' => $newValue]
@@ -459,16 +373,12 @@ class CopyDictionaryJob implements TranslationJobInterface, LoggerAwareInterface
         $target->setTarget($value);
     }
 
-    /**
-     * Clean the target language.
-     *
-     * @return void
-     */
+    /** Clean the target language. */
     private function cleanTarget(): void
     {
         foreach ($this->targetDictionary->keys() as $key) {
             if (!$this->sourceDictionary->has($key) || $this->sourceDictionary->get($key)->isSourceEmpty()) {
-                $this->logger->log($this->logLevel, 'Removing obsolete {key}.', ['key' => $key]);
+                $this->log($this->logLevel, 'Removing obsolete {key}.', ['key' => $key]);
                 if ($this->dryRun) {
                     continue;
                 }
@@ -482,18 +392,23 @@ class CopyDictionaryJob implements TranslationJobInterface, LoggerAwareInterface
      * Check if the passed key is filtered by any of the regexes.
      *
      * @param string $key The key to check.
-     *
-     * @return bool
      */
-    private function isFiltered($key): bool
+    private function isFiltered(string $key): bool
     {
         foreach ($this->filters as $expression) {
             if (preg_match($expression, $key)) {
-                $this->logger->debug(sprintf('"%1$s" is filtered by "%2$s', $key, $expression));
+                $this->log(LogLevel::DEBUG, sprintf('"%1$s" is filtered by "%2$s', $key, $expression));
                 return true;
             }
         }
 
         return false;
+    }
+
+    private function log(string $level, string $message, array $context = []): void
+    {
+        if ($this->logger) {
+            $this->logger->log($level, $message, $context);
+        }
     }
 }

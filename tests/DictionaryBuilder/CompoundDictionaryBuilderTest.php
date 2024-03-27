@@ -1,23 +1,6 @@
 <?php
 
-/**
- * This file is part of cyberspectrum/i18n.
- *
- * (c) 2018 CyberSpectrum.
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * This project is provided in good faith and hope to be usable by anyone.
- *
- * @package    cyberspectrum/i18n
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2018 CyberSpectrum.
- * @license    https://github.com/cyberspectrum/i18n/blob/master/LICENSE MIT
- * @filesource
- */
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace CyberSpectrum\I18N\Test\DictionaryBuilder;
 
@@ -28,20 +11,15 @@ use CyberSpectrum\I18N\Configuration\Definition\DictionaryDefinition;
 use CyberSpectrum\I18N\Dictionary\WritableDictionaryInterface;
 use CyberSpectrum\I18N\DictionaryBuilder\CompoundDictionaryBuilder;
 use CyberSpectrum\I18N\Job\JobFactory;
+use Generator;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-/**
- * This tests the default dictionary builder.
- *
- * @covers \CyberSpectrum\I18N\DictionaryBuilder\CompoundDictionaryBuilder
- */
+use function iterator_to_array;
+
+/** @covers \CyberSpectrum\I18N\DictionaryBuilder\CompoundDictionaryBuilder */
 class CompoundDictionaryBuilderTest extends TestCase
 {
-    /**
-     * Test.
-     *
-     * @return void
-     */
     public function testGetDictionary(): void
     {
         $factory         = $this->mockJobFactory();
@@ -72,25 +50,19 @@ class CompoundDictionaryBuilderTest extends TestCase
             ->expects($this->once())
             ->method('createDictionary')
             ->willReturnCallback(function ($dictionary) use ($childDictionary) {
-                $this->assertInstanceOf(DecoratedDictionaryDefinition::class, $dictionary);
-                /** @var DecoratedDictionaryDefinition $dictionary */
-                $this->assertSame('en', $dictionary->getSourceLanguage());
-                $this->assertSame('de', $dictionary->getTargetLanguage());
+                self::assertInstanceOf(DecoratedDictionaryDefinition::class, $dictionary);
+                self::assertSame('en', $dictionary->getSourceLanguage());
+                self::assertSame('de', $dictionary->getTargetLanguage());
 
                 return $childDictionary;
             });
 
         $instance = new CompoundDictionaryBuilder();
 
-        $this->assertInstanceOf(CompoundDictionary::class, $dictionary = $instance->build($factory, $definition));
-        $this->assertSame(['something.key'], \iterator_to_array($dictionary->keys()));
+        self::assertInstanceOf(CompoundDictionary::class, $dictionary = $instance->build($factory, $definition));
+        self::assertSame(['something.key'], iterator_to_array($dictionary->keys()));
     }
 
-    /**
-     * Test.
-     *
-     * @return void
-     */
     public function testGetDictionaryForWrite(): void
     {
         $factory         = $this->mockJobFactory();
@@ -121,37 +93,29 @@ class CompoundDictionaryBuilderTest extends TestCase
             ->expects($this->once())
             ->method('createWritableDictionary')
             ->willReturnCallback(function ($dictionary) use ($childDictionary) {
-                $this->assertInstanceOf(DecoratedDictionaryDefinition::class, $dictionary);
-                /** @var DecoratedDictionaryDefinition $dictionary */
-                $this->assertSame('en', $dictionary->getSourceLanguage());
-                $this->assertSame('de', $dictionary->getTargetLanguage());
+                self::assertInstanceOf(DecoratedDictionaryDefinition::class, $dictionary);
+                self::assertSame('en', $dictionary->getSourceLanguage());
+                self::assertSame('de', $dictionary->getTargetLanguage());
 
                 return $childDictionary;
             });
 
         $instance = new CompoundDictionaryBuilder();
 
-        $this->assertInstanceOf(CompoundDictionary::class, $dictionary = $instance->buildWritable($factory, $definition));
+        self::assertInstanceOf(CompoundDictionary::class, $instance->buildWritable($factory, $definition));
     }
 
     /**
      * Mock a job factory.
      *
-     * @return \PHPUnit\Framework\MockObject\MockObject|JobFactory
+     * @return MockObject|JobFactory
      */
-    private function mockJobFactory(): \PHPUnit\Framework\MockObject\MockObject
+    private function mockJobFactory(): MockObject
     {
-        $jobBuilder = $this->getMockBuilder(JobFactory::class)->disableOriginalConstructor()->getMock();
-
-        return $jobBuilder;
+        return $this->getMockBuilder(JobFactory::class)->disableOriginalConstructor()->getMock();
     }
 
-    /*
-     * @param array @array
-     *
-     * @return \Generator
-     */
-    protected function arrayAsGenerator(array $array): \Generator
+    protected function arrayAsGenerator(array $array): Generator
     {
         yield from $array;
     }

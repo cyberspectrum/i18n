@@ -1,23 +1,6 @@
 <?php
 
-/**
- * This file is part of cyberspectrum/i18n.
- *
- * (c) 2018 CyberSpectrum.
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * This project is provided in good faith and hope to be usable by anyone.
- *
- * @package    cyberspectrum/i18n
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2018 CyberSpectrum.
- * @license    https://github.com/cyberspectrum/i18n/blob/master/LICENSE MIT
- * @filesource
- */
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace CyberSpectrum\I18N\Compound;
 
@@ -25,6 +8,9 @@ use CyberSpectrum\I18N\Dictionary\DictionaryInterface;
 use CyberSpectrum\I18N\Exception\NotSupportedException;
 use CyberSpectrum\I18N\Exception\TranslationNotFoundException;
 use CyberSpectrum\I18N\TranslationValue\TranslationValueInterface;
+use InvalidArgumentException;
+use RuntimeException;
+use Traversable;
 
 /**
  * This is a compound dictionary.
@@ -33,24 +19,20 @@ class CompoundDictionary implements DictionaryInterface
 {
     /**
      * The source language.
-     *
-     * @var string
      */
-    private $sourceLanguage;
+    private string $sourceLanguage;
 
     /**
      * The target language.
-     *
-     * @var string
      */
-    private $targetLanguage;
+    private string $targetLanguage;
 
     /**
      * The contained dictionaries.
      *
-     * @var DictionaryInterface[]
+     * @var array<string, DictionaryInterface>
      */
-    private $dictionaries;
+    private array $dictionaries;
 
     /**
      * Create a new instance.
@@ -62,12 +44,10 @@ class CompoundDictionary implements DictionaryInterface
     {
         $this->sourceLanguage = $sourceLanguage;
         $this->targetLanguage = $targetLanguage;
+        $this->dictionaries   = [];
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function keys(): \Traversable
+    public function keys(): Traversable
     {
         foreach ($this->dictionaries as $prefix => $dictionary) {
             foreach ($dictionary->keys() as $key) {
@@ -76,39 +56,25 @@ class CompoundDictionary implements DictionaryInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function get(string $key): TranslationValueInterface
     {
-        /** @var DictionaryInterface $dictionary */
         [$dictionary, $remainder, $prefix] = $this->splitDictionaryRemainderAndPrefix($key);
 
         return new TranslationValue($prefix, $dictionary->get($remainder));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function has(string $key): bool
     {
-        /** @var DictionaryInterface $dictionary */
         [$dictionary, $remainder] = $this->splitDictionaryRemainderAndPrefix($key);
 
         return $dictionary->has($remainder);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getSourceLanguage(): string
     {
         return $this->sourceLanguage;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getTargetLanguage(): string
     {
         return $this->targetLanguage;
@@ -120,15 +86,13 @@ class CompoundDictionary implements DictionaryInterface
      * @param string              $prefix     The prefix for the dictionary.
      * @param DictionaryInterface $dictionary The dictionary to add.
      *
-     * @return static
-     *
-     * @throws \RuntimeException When already a dictionary with the prefix is contained.
+     * @throws RuntimeException When already a dictionary with the prefix is contained.
      * @throws NotSupportedException On language mismatch.
      */
-    public function addDictionary(string $prefix, DictionaryInterface $dictionary)
+    public function addDictionary(string $prefix, DictionaryInterface $dictionary): void
     {
         if (isset($this->dictionaries[$prefix])) {
-            throw new \RuntimeException('A dictionary with prefix "' . $prefix . '" has already been added.');
+            throw new RuntimeException('A dictionary with prefix "' . $prefix . '" has already been added.');
         }
 
         if ($this->sourceLanguage !== $real = $dictionary->getSourceLanguage()) {
@@ -148,19 +112,17 @@ class CompoundDictionary implements DictionaryInterface
         }
 
         $this->dictionaries[$prefix] = $dictionary;
-
-        return $this;
     }
 
     /**
      * Obtain the dictionary for the key.
      *
      * Returns:
-     *   [DictionaryInterface, remainder]
+     *   [DictionaryInterface, remainder, prefix]
      *
      * @param string $key The key.
      *
-     * @return array
+     * @return array{0: DictionaryInterface, 1: string, 2: string }
      */
     protected function splitDictionaryRemainderAndPrefix(string $key): array
     {
@@ -177,15 +139,15 @@ class CompoundDictionary implements DictionaryInterface
      *
      * @param string $key The key.
      *
-     * @return array
+     * @return array{0: string, 1: string}
      *
-     * @throws \InvalidArgumentException    When the key has an invalid format.
+     * @throws InvalidArgumentException    When the key has an invalid format.
      * @throws TranslationNotFoundException When no dictionary for the key prefix is registered.
      */
     protected function splitRemainderAndPrefix(string $key): array
     {
         if (false === ($pos = strpos($key, '.'))) {
-            throw new \InvalidArgumentException('Key "' . $key . '" has invalid format.');
+            throw new InvalidArgumentException('Key "' . $key . '" has invalid format.');
         }
 
         $prefix = substr($key, 0, $pos);
