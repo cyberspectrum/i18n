@@ -44,12 +44,16 @@ class MemoryTranslationValue implements WritableTranslationValueInterface
 
     public function isSourceEmpty(): bool
     {
-        return !$this->getSource();
+        $source = $this->getSource();
+
+        return $source === null || $source === '';
     }
 
     public function isTargetEmpty(): bool
     {
-        return !$this->getTarget();
+        $target = $this->getTarget();
+
+        return $target === null || $target === '';
     }
 
     public function setSource(string $value): void

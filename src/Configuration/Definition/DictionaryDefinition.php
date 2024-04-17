@@ -15,8 +15,12 @@ use RuntimeException;
  *   dictionary?: string,
  *   source_language?: string,
  *   target_language?: string,
+ *   ...<string, mixed>
  * }
- * @extends Definition<TDictionaryDefinitionConfigurationArray>
+ *
+ * @template-covariant TDataArray of TDictionaryDefinitionConfigurationArray
+ *
+ * @extends Definition<TDataArray>
  */
 class DictionaryDefinition extends Definition
 {

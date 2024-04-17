@@ -16,8 +16,8 @@ interface DefinitionBuilderInterface
     /**
      * Build a definition from the passed values.
      *
-     * @param Configuration $configuration The configuration.
-     * @param array         $data          The configuration values.
+     * @param Configuration        $configuration The configuration.
+     * @param array<string, mixed> $data          The configuration values.
      *
      * @throws InvalidArgumentException When the passed configuration is invalid.
      */

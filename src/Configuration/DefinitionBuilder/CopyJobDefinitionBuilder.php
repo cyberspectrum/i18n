@@ -16,8 +16,8 @@ use function array_key_exists;
 /**
  * This is a simple key value store.
  *
- * @psalm-import-type TDictionaryDefinitionConfigurationArray from DictionaryDefinition
- * @psalm-type TCopyJobDictionaryConfigurationArray=array{name?: string}&TDictionaryDefinitionConfigurationArray
+ * @psalm-import-type TDictionaryDefinitionConfigurationArray from DictionaryDefinition as TBaseConfiguration
+ * @psalm-type TCopyJobDictionaryConfigurationArray=array{name?: string}
  * @psalm-type TCopyJobDictionaryConfiguration=TCopyJobDictionaryConfigurationArray|string
  * @psalm-type TCopyJobDictionaryConfigurationOverrides=array{source_language?: string, target_language?: string}
  * @psalm-type TCopyJobDefinitionConfigurationArray=array{
@@ -87,15 +87,15 @@ class CopyJobDefinitionBuilder implements DefinitionBuilderInterface
      */
     private function makeDictionary(
         Configuration $configuration,
-        $dictionary,
+        array|string $dictionary,
         array $overrides,
         string $path
     ): ExtendedDictionaryDefinition {
         if (is_array($dictionary)) {
-            if (!isset($dictionary['name'])) {
+            $name = $dictionary['name'] ?? null;
+            if (null === $name) {
                 throw new InvalidArgumentException('Dictionary "' . $path . '" information is missing key "name".');
             }
-            $name      = $dictionary['name'];
             $overrides = array_merge($overrides, $dictionary);
             unset($overrides['name']);
             return new ExtendedDictionaryDefinition($name, $configuration, $overrides);

@@ -14,10 +14,12 @@ use Symfony\Component\DependencyInjection\ServiceLocator;
  * This builds job and dictionary definitions from configuration arrays.
  *
  * @psalm-type TDictionaryDefinitionConfigurationArray=array{
- *   type: string
+ *   type: string,
+ *   ...<string, mixed>
  * }
  * @psalm-type TJobDefinitionConfigurationArray=array{
- *   type: string
+ *   type: string,
+ *   ...<string, mixed>
  * }
  */
 class DefinitionBuilder

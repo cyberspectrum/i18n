@@ -165,6 +165,10 @@ final class CopyDictionaryJob implements TranslationJobInterface, LoggerAwareInt
      */
     public function addFilter(string $expression): CopyDictionaryJob
     {
+        if ('' === $expression) {
+            throw new InvalidArgumentException('Expression must not be empty');
+        }
+
         // Check if the first and last char match - if not, we must encapsulate with '/'.
         if ($expression[0] !== substr($expression, -1)) {
             $expression = '/' . $expression . '/';
@@ -396,7 +400,7 @@ final class CopyDictionaryJob implements TranslationJobInterface, LoggerAwareInt
     private function isFiltered(string $key): bool
     {
         foreach ($this->filters as $expression) {
-            if (preg_match($expression, $key)) {
+            if ('' !== $expression && preg_match($expression, $key)) {
                 $this->log(LogLevel::DEBUG, sprintf('"%1$s" is filtered by "%2$s', $key, $expression));
                 return true;
             }

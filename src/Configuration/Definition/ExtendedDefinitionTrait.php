@@ -13,7 +13,7 @@ use function is_array;
 /**
  * This provides a way to "wrap" a parent definition and enhance/override it with own values.
  *
- * @template TDataArray as array<string, mixed>
+ * @template-covariant TDataArray of array<string, mixed>
  *
  * @psalm-require-extends Definition
  */

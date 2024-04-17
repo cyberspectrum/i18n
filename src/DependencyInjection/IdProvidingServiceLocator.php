@@ -13,6 +13,10 @@ use function array_keys;
  *
  * This helps mainly for debug purposes at the expense of more memory usage.
  *
+ * @template-covariant T of mixed
+ *
+ * @extends ServiceLocator<T>
+ *
  * @psalm-suppress PropertyNotSetInConstructor - we inherit some properties that are checked via isset().
  */
 class IdProvidingServiceLocator extends ServiceLocator

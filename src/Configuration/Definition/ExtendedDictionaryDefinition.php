@@ -10,6 +10,8 @@ use CyberSpectrum\I18N\Configuration\Configuration;
  * This provides a way to "wrap" a parent definition and enhance it with own values.
  *
  * @psalm-import-type TDictionaryDefinitionConfigurationArray from DictionaryDefinition
+ *
+ * @extends DictionaryDefinition<TDictionaryDefinitionConfigurationArray>
  */
 class ExtendedDictionaryDefinition extends DictionaryDefinition
 {

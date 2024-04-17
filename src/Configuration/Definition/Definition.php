@@ -12,19 +12,21 @@ use Traversable;
 /**
  * This is a simple key value store.
  *
- * @template TDataArray as array<string, mixed>
+ * @template-covariant TDataArray of array<string, mixed>
+ *
+ * @implements IteratorAggregate<string, mixed>
  */
 class Definition implements IteratorAggregate
 {
     /** The name of the definition. */
-    protected string $name;
+    private string $name;
 
     /**
      * The data.
      *
      * @var TDataArray
      */
-    protected array $data;
+    private array $data;
 
     /**
      * @param string     $name The name.

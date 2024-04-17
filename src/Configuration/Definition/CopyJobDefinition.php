@@ -7,6 +7,7 @@ namespace CyberSpectrum\I18N\Configuration\Definition;
 /**
  * This describes a copy job.
  *
+ * @psalm-import-type TDictionaryDefinitionConfigurationArray from DictionaryDefinition
  * @psalm-type TCopyJobDefinitionConfigurationArray=array<string, mixed>
  * @extends Definition<TCopyJobDefinitionConfigurationArray>
  */
