@@ -50,7 +50,7 @@ final class BatchJobDefinitionBuilder implements DefinitionBuilderInterface
 
             // Create local job.
             if (!isset($job['name'])) {
-                $job['name'] = $name . '.' . $index;
+                $job['name'] = $name . '.' . (string) $index;
             }
             $jobs[] = $this->definitionBuilder->buildJob($configuration, $job);
         }
