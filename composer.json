@@ -39,12 +39,12 @@
       "CyberSpectrum\\I18N\\Test\\": "tests"
     }
   },
+  "config": {
+    "sort-packages": true
+  },
   "extra": {
     "branch-alias": {
       "dev-fix/phpcq-2": "1.1.x-dev"
     }
-  },
-  "config": {
-    "sort-packages": true
   }
 }
