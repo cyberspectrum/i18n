@@ -9,7 +9,7 @@ use CyberSpectrum\I18N\TranslationValue\WritableTranslationValueInterface;
 /**
  * This implements a simple translation value - the value is stored in a local property.
  */
-class MemoryTranslationValue implements WritableTranslationValueInterface
+final class MemoryTranslationValue implements WritableTranslationValueInterface
 {
     /** The translation key. */
     private string $key;

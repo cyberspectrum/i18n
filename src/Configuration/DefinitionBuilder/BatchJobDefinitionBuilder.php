@@ -23,7 +23,7 @@ use InvalidArgumentException;
  *   jobs: array<int, TBatchJobConfiguration>,
  * }
  */
-class BatchJobDefinitionBuilder implements DefinitionBuilderInterface
+final class BatchJobDefinitionBuilder implements DefinitionBuilderInterface
 {
     /** The definition builder to use. */
     private DefinitionBuilder $definitionBuilder;

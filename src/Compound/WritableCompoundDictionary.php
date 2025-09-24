@@ -12,7 +12,7 @@ use InvalidArgumentException;
 /**
  * This is a writable compound dictionary.
  */
-class WritableCompoundDictionary extends CompoundDictionary implements WritableDictionaryInterface
+final class WritableCompoundDictionary extends CompoundDictionary implements WritableDictionaryInterface
 {
     #[\Override]
     public function add(string $key): WritableTranslationValueInterface

@@ -27,7 +27,7 @@ use function is_string;
  *   dictionaries: array<string, TCompoundDictionaryConfiguration>,
  * }
  */
-class CompoundDictionaryDefinitionBuilder implements DefinitionBuilderInterface
+final class CompoundDictionaryDefinitionBuilder implements DefinitionBuilderInterface
 {
     /** The definition builder to use. */
     private DefinitionBuilder $definitionBuilder;

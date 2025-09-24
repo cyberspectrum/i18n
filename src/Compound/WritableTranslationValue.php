@@ -11,7 +11,7 @@ use CyberSpectrum\I18N\TranslationValue\WritableTranslationValueInterface;
  *
  * @property WritableTranslationValueInterface $delegate
  */
-class WritableTranslationValue extends TranslationValue implements WritableTranslationValueInterface
+final class WritableTranslationValue extends TranslationValue implements WritableTranslationValueInterface
 {
     /**
      * Create a new instance.

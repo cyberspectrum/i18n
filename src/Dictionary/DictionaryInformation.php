@@ -9,7 +9,7 @@ use function sprintf;
 /**
  * This class provides information about a dictionary.
  */
-class DictionaryInformation
+final class DictionaryInformation
 {
     /** The name of the dictionary. */
     private string $name;

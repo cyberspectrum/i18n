@@ -11,7 +11,7 @@ namespace CyberSpectrum\I18N\Configuration\Definition;
  *
  * @extends DictionaryDefinition<TDictionaryDefinitionConfigurationArray>
  */
-class DecoratedDictionaryDefinition extends DictionaryDefinition
+final class DecoratedDictionaryDefinition extends DictionaryDefinition
 {
     /** @use ExtendedDefinitionTrait<TDictionaryDefinitionConfigurationArray> */
     use ExtendedDefinitionTrait;

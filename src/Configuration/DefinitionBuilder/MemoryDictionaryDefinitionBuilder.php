@@ -16,7 +16,7 @@ use InvalidArgumentException;
  *   name: string,
  * }
  */
-class MemoryDictionaryDefinitionBuilder implements DefinitionBuilderInterface
+final class MemoryDictionaryDefinitionBuilder implements DefinitionBuilderInterface
 {
     #[\Override]
     public function build(Configuration $configuration, array $data): Definition

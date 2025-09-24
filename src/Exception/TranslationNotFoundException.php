@@ -10,7 +10,7 @@ use Throwable;
 /**
  * This exception is thrown when ever a translation was not found.
  */
-class TranslationNotFoundException extends \RuntimeException
+final class TranslationNotFoundException extends \RuntimeException
 {
     /** The dictionary. */
     private DictionaryInterface $dictionary;

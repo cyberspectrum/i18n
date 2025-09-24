@@ -13,7 +13,7 @@ use CyberSpectrum\I18N\Configuration\Configuration;
  *
  * @extends DictionaryDefinition<TDictionaryDefinitionConfigurationArray>
  */
-class ExtendedDictionaryDefinition extends DictionaryDefinition
+final class ExtendedDictionaryDefinition extends DictionaryDefinition
 {
     /** @use ExtendedDefinitionTrait<TDictionaryDefinitionConfigurationArray> */
     use ExtendedDefinitionTrait;

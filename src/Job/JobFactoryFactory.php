@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\ServiceLocator;
 /**
  * This builds translation jobs.
  */
-class JobFactoryFactory
+final class JobFactoryFactory
 {
     /** The dictionary providers. */
     private ServiceLocator $dictionaryBuilders;

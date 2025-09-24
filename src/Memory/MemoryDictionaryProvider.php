@@ -16,7 +16,7 @@ use Psr\Log\LoggerAwareTrait;
 use Traversable;
 
 /** This provides access to the translations in the store. */
-class MemoryDictionaryProvider implements
+final class MemoryDictionaryProvider implements
     DictionaryProviderInterface,
     WritableDictionaryProviderInterface,
     LoggerAwareInterface

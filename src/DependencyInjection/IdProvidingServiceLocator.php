@@ -20,7 +20,7 @@ use function array_keys;
  * @psalm-suppress TooManyTemplateParams - template parameters are added in symfony from 6.0+ on.
  * @psalm-suppress PropertyNotSetInConstructor - we inherit some properties that are checked via isset().
  */
-class IdProvidingServiceLocator extends ServiceLocator
+final class IdProvidingServiceLocator extends ServiceLocator
 {
     /**
      * The id list.

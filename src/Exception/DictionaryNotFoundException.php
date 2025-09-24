@@ -7,7 +7,7 @@ namespace CyberSpectrum\I18N\Exception;
 /**
  * This exception is thrown when a dictionary has not been found by a provider.
  */
-class DictionaryNotFoundException extends \RuntimeException
+final class DictionaryNotFoundException extends \RuntimeException
 {
     /** The name of the dictionary. */
     private string $name;

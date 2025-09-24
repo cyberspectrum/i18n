@@ -15,7 +15,7 @@ use InvalidArgumentException;
 /**
  * This creates a batch job from a job definition.
  */
-class BatchJobBuilder implements JobBuilderInterface
+final class BatchJobBuilder implements JobBuilderInterface
 {
     /**
      * Build a copy job from the passed definition.

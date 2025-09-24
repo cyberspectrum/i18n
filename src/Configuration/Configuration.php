@@ -10,7 +10,7 @@ use InvalidArgumentException;
 /**
  * This stores a config.
  */
-class Configuration
+final class Configuration
 {
     /**
      * The list of configured jobs.

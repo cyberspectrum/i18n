@@ -22,7 +22,7 @@ use UnexpectedValueException;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class JobFactory
+final class JobFactory
 {
     /** The dictionary builders. */
     private ServiceLocator $dictionaryBuilders;

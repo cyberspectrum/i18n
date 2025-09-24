@@ -11,7 +11,7 @@ namespace CyberSpectrum\I18N\Configuration\Definition;
  * @psalm-type TCopyJobDefinitionConfigurationArray=array<string, mixed>
  * @extends Definition<TCopyJobDefinitionConfigurationArray>
  */
-class CopyJobDefinition extends Definition
+final class CopyJobDefinition extends Definition
 {
     /** The definition of the source dictionary. */
     private DictionaryDefinition $source;

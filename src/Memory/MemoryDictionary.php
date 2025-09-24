@@ -17,7 +17,7 @@ use Traversable;
  *
  * @psalm-type TMemoryDictionaryTranslationItem = array{source?: string, target?: string}
  */
-class MemoryDictionary implements WritableDictionaryInterface
+final class MemoryDictionary implements WritableDictionaryInterface
 {
     /**
      * The translation buffer.

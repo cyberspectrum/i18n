@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\ServiceLocator;
  *   ...<string, mixed>
  * }
  */
-class DefinitionBuilder
+final class DefinitionBuilder
 {
     /** The services for building definitions. */
     private ServiceLocator $dictionaryBuilders;

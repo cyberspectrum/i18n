@@ -10,7 +10,7 @@ use Psr\Log\LoggerAwareTrait;
 /**
  * This job is a composite of several other jobs.
  */
-class BatchJob implements TranslationJobInterface, LoggerAwareInterface
+final class BatchJob implements TranslationJobInterface, LoggerAwareInterface
 {
     use LoggerAwareTrait;
 

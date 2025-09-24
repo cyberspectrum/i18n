@@ -10,7 +10,7 @@ use Throwable;
 /**
  * This exception is thrown when ever a translation is already contained.
  */
-class TranslationAlreadyContainedException extends AbstractDictionaryException
+final class TranslationAlreadyContainedException extends AbstractDictionaryException
 {
     /** The key. */
     private string $key;

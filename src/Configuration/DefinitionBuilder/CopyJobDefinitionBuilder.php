@@ -28,7 +28,7 @@ use function array_key_exists;
  *   target_language?: string,
  * }
  */
-class CopyJobDefinitionBuilder implements DefinitionBuilderInterface
+final class CopyJobDefinitionBuilder implements DefinitionBuilderInterface
 {
     #[\Override]
     public function build(Configuration $configuration, array $data): Definition

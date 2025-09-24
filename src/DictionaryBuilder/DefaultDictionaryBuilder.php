@@ -18,7 +18,7 @@ use UnexpectedValueException;
 /**
  * This builds dictionaries from the configured providers.
  */
-class DefaultDictionaryBuilder implements DictionaryBuilderInterface
+final class DefaultDictionaryBuilder implements DictionaryBuilderInterface
 {
     /** The service locator. */
     private ServiceLocator $providers;

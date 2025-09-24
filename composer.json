@@ -26,6 +26,7 @@
     "symfony/dependency-injection": "^5.4 || ^6.0 || ^7.0"
   },
   "require-dev": {
+    "dg/bypass-finals": "^1.9",
     "phpcq/runner-bootstrap": "^1.0@dev"
   },
   "autoload": {
@@ -41,6 +42,7 @@
   "extra": {
     "branch-alias": {
       "dev-fix/phpcq-2": "1.1.x-dev"
-    }
+    },
+    "sort-packages": true
   }
 }

@@ -15,7 +15,7 @@ use InvalidArgumentException;
 /**
  * This creates a copy job from a job definition.
  */
-class CopyJobBuilder implements JobBuilderInterface
+final class CopyJobBuilder implements JobBuilderInterface
 {
     /**
      * Build a copy job from the passed definition.
