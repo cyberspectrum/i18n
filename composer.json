@@ -42,7 +42,9 @@
   "extra": {
     "branch-alias": {
       "dev-fix/phpcq-2": "1.1.x-dev"
-    },
+    }
+  },
+  "config": {
     "sort-packages": true
   }
 }
