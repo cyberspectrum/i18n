@@ -30,6 +30,7 @@ class MemoryDictionaryProvider implements
      */
     private array $dictionaries = [];
 
+    #[\Override]
     public function getAvailableDictionaries(): Traversable
     {
         foreach ($this->dictionaries as $name => $dictionary) {
@@ -37,6 +38,7 @@ class MemoryDictionaryProvider implements
         }
     }
 
+    #[\Override]
     public function getDictionary(
         string $name,
         string $sourceLanguage,
@@ -59,6 +61,7 @@ class MemoryDictionaryProvider implements
         throw new DictionaryNotFoundException($name, $sourceLanguage, $targetLanguage);
     }
 
+    #[\Override]
     public function getAvailableWritableDictionaries(): Traversable
     {
         foreach ($this->dictionaries as $name => $dictionary) {
@@ -66,6 +69,7 @@ class MemoryDictionaryProvider implements
         }
     }
 
+    #[\Override]
     public function getDictionaryForWrite(
         string $name,
         string $sourceLanguage,
@@ -89,6 +93,7 @@ class MemoryDictionaryProvider implements
         throw new DictionaryNotFoundException($name, $sourceLanguage, $targetLanguage);
     }
 
+    #[\Override]
     public function createDictionary(
         string $name,
         string $sourceLanguage,

@@ -24,21 +24,25 @@ class WritableTranslationValue extends TranslationValue implements WritableTrans
         parent::__construct($prefix, $delegate);
     }
 
+    #[\Override]
     public function setSource(string $value): void
     {
         $this->delegate->setSource($value);
     }
 
+    #[\Override]
     public function setTarget(string $value): void
     {
         $this->delegate->setTarget($value);
     }
 
+    #[\Override]
     public function clearSource(): void
     {
         $this->delegate->clearSource();
     }
 
+    #[\Override]
     public function clearTarget(): void
     {
         $this->delegate->clearTarget();

@@ -9,6 +9,7 @@ use InvalidArgumentException;
 /** This loads a config file. */
 abstract class AbstractConfigurationLoader implements ConfigurationLoaderInterface
 {
+    #[\Override]
     public function load($source, Configuration $config = null): Configuration
     {
         if (null === $config) {

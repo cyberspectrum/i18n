@@ -222,6 +222,7 @@ final class CopyDictionaryJob implements TranslationJobInterface, LoggerAwareInt
         return $this->filters;
     }
 
+    #[\Override]
     public function run(bool $dryRun = null): void
     {
         $prevDry = $this->dryRun;

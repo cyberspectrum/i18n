@@ -41,6 +41,7 @@ class DefaultDictionaryBuilder implements DictionaryBuilderInterface
      *
      * @throws RuntimeException When the defined provider can not create readable dictionaries.
      */
+    #[\Override]
     public function build(JobFactory $factory, DictionaryDefinition $definition): DictionaryInterface
     {
         $provider = $this->getProvider($definition);
@@ -66,6 +67,7 @@ class DefaultDictionaryBuilder implements DictionaryBuilderInterface
      *
      * @throws RuntimeException When the defined provider can not create writable dictionaries.
      */
+    #[\Override]
     public function buildWritable(JobFactory $factory, DictionaryDefinition $definition): WritableDictionaryInterface
     {
         $provider = $this->getProvider($definition);

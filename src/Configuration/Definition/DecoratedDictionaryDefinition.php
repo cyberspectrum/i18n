@@ -31,6 +31,7 @@ class DecoratedDictionaryDefinition extends DictionaryDefinition
         $this->delegated = $definition;
     }
 
+    #[\Override]
     protected function getDelegated(): Definition
     {
         return $this->delegated;

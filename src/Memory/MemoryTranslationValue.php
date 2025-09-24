@@ -27,21 +27,25 @@ class MemoryTranslationValue implements WritableTranslationValueInterface
         $this->target = $target;
     }
 
+    #[\Override]
     public function getKey(): string
     {
         return $this->key;
     }
 
+    #[\Override]
     public function getSource(): ?string
     {
         return $this->source;
     }
 
+    #[\Override]
     public function getTarget(): ?string
     {
         return $this->target;
     }
 
+    #[\Override]
     public function isSourceEmpty(): bool
     {
         $source = $this->getSource();
@@ -49,6 +53,7 @@ class MemoryTranslationValue implements WritableTranslationValueInterface
         return $source === null || $source === '';
     }
 
+    #[\Override]
     public function isTargetEmpty(): bool
     {
         $target = $this->getTarget();
@@ -56,21 +61,25 @@ class MemoryTranslationValue implements WritableTranslationValueInterface
         return $target === null || $target === '';
     }
 
+    #[\Override]
     public function setSource(string $value): void
     {
         $this->source = $value;
     }
 
+    #[\Override]
     public function setTarget(string $value): void
     {
         $this->target = $value;
     }
 
+    #[\Override]
     public function clearSource(): void
     {
         $this->source = null;
     }
 
+    #[\Override]
     public function clearTarget(): void
     {
         $this->target = null;

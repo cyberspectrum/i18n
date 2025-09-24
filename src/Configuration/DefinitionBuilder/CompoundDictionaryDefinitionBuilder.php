@@ -37,6 +37,7 @@ class CompoundDictionaryDefinitionBuilder implements DefinitionBuilderInterface
         $this->definitionBuilder = $definitionBuilder;
     }
 
+    #[\Override]
     public function build(Configuration $configuration, array $data): Definition
     {
         $this->checkConfiguration($data);

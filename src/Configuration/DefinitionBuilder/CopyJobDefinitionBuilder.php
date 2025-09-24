@@ -30,6 +30,7 @@ use function array_key_exists;
  */
 class CopyJobDefinitionBuilder implements DefinitionBuilderInterface
 {
+    #[\Override]
     public function build(Configuration $configuration, array $data): Definition
     {
         $this->checkConfiguration($data);

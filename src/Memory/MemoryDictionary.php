@@ -70,6 +70,7 @@ class MemoryDictionary implements WritableDictionaryInterface
         }
     }
 
+    #[\Override]
     public function keys(): Traversable
     {
         foreach ($this->translationBuffer as $key => $_ignored) {
@@ -77,26 +78,31 @@ class MemoryDictionary implements WritableDictionaryInterface
         }
     }
 
+    #[\Override]
     public function get(string $key): TranslationValueInterface
     {
         return $this->getWritable($key);
     }
 
+    #[\Override]
     public function has(string $key): bool
     {
         return array_key_exists($key, $this->translationBuffer);
     }
 
+    #[\Override]
     public function getSourceLanguage(): string
     {
         return $this->sourceLanguage;
     }
 
+    #[\Override]
     public function getTargetLanguage(): string
     {
         return $this->targetLanguage;
     }
 
+    #[\Override]
     public function add(string $key): WritableTranslationValueInterface
     {
         if ($this->has($key)) {
@@ -106,6 +112,7 @@ class MemoryDictionary implements WritableDictionaryInterface
         return $this->addItem($key, null, null);
     }
 
+    #[\Override]
     public function remove(string $key): void
     {
         if (!$this->has($key)) {
@@ -115,6 +122,7 @@ class MemoryDictionary implements WritableDictionaryInterface
         unset($this->translationBuffer[$key]);
     }
 
+    #[\Override]
     public function getWritable(string $key): WritableTranslationValueInterface
     {
         if (!$this->has($key)) {

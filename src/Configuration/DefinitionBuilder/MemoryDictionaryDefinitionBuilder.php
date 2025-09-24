@@ -18,6 +18,7 @@ use InvalidArgumentException;
  */
 class MemoryDictionaryDefinitionBuilder implements DefinitionBuilderInterface
 {
+    #[\Override]
     public function build(Configuration $configuration, array $data): Definition
     {
         $this->checkConfiguration($data);

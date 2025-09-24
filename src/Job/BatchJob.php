@@ -28,6 +28,7 @@ class BatchJob implements TranslationJobInterface, LoggerAwareInterface
         $this->logger = null;
     }
 
+    #[\Override]
     public function run(?bool $dryRun = null): void
     {
         foreach ($this->jobs as $name => $job) {

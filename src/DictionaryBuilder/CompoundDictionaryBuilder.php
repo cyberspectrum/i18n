@@ -25,6 +25,7 @@ class CompoundDictionaryBuilder implements DictionaryBuilderInterface
      *
      * @return DictionaryInterface
      */
+    #[\Override]
     public function build(JobFactory $factory, DictionaryDefinition $definition): DictionaryInterface
     {
         $dictionary = new CompoundDictionary($definition->getSourceLanguage(), $definition->getTargetLanguage());
@@ -53,6 +54,7 @@ class CompoundDictionaryBuilder implements DictionaryBuilderInterface
      *
      * @return WritableDictionaryInterface
      */
+    #[\Override]
     public function buildWritable(JobFactory $factory, DictionaryDefinition $definition): WritableDictionaryInterface
     {
         $dictionary = new WritableCompoundDictionary(

@@ -14,6 +14,7 @@ use InvalidArgumentException;
  */
 class WritableCompoundDictionary extends CompoundDictionary implements WritableDictionaryInterface
 {
+    #[\Override]
     public function add(string $key): WritableTranslationValueInterface
     {
         [$dictionary, $remainder, $prefix] = $this->splitDictionaryRemainderAndPrefix($key);
@@ -22,6 +23,7 @@ class WritableCompoundDictionary extends CompoundDictionary implements WritableD
         return new WritableTranslationValue($prefix, $dictionary->add($remainder));
     }
 
+    #[\Override]
     public function remove(string $key): void
     {
         [$dictionary, $remainder] = $this->splitDictionaryRemainderAndPrefix($key);
@@ -30,6 +32,7 @@ class WritableCompoundDictionary extends CompoundDictionary implements WritableD
         $dictionary->remove($remainder);
     }
 
+    #[\Override]
     public function getWritable(string $key): WritableTranslationValueInterface
     {
         [$dictionary, $remainder, $prefix] = $this->splitDictionaryRemainderAndPrefix($key);
@@ -46,6 +49,7 @@ class WritableCompoundDictionary extends CompoundDictionary implements WritableD
      *
      * @throws InvalidArgumentException When the dictionary is not writable.
      */
+    #[\Override]
     public function addDictionary(string $prefix, DictionaryInterface $dictionary): void
     {
         if (!$dictionary instanceof WritableDictionaryInterface) {

@@ -35,6 +35,7 @@ class ExtendedDictionaryDefinition extends DictionaryDefinition
     }
 
     /** Obtain the delegator. */
+    #[\Override]
     protected function getDelegated(): Definition
     {
         return $this->configuration->getDictionary($this->getName());

@@ -47,6 +47,7 @@ class CompoundDictionary implements DictionaryInterface
         $this->dictionaries   = [];
     }
 
+    #[\Override]
     public function keys(): Traversable
     {
         foreach ($this->dictionaries as $prefix => $dictionary) {
@@ -56,6 +57,7 @@ class CompoundDictionary implements DictionaryInterface
         }
     }
 
+    #[\Override]
     public function get(string $key): TranslationValueInterface
     {
         [$dictionary, $remainder, $prefix] = $this->splitDictionaryRemainderAndPrefix($key);
@@ -63,6 +65,7 @@ class CompoundDictionary implements DictionaryInterface
         return new TranslationValue($prefix, $dictionary->get($remainder));
     }
 
+    #[\Override]
     public function has(string $key): bool
     {
         [$dictionary, $remainder] = $this->splitDictionaryRemainderAndPrefix($key);
@@ -70,11 +73,13 @@ class CompoundDictionary implements DictionaryInterface
         return $dictionary->has($remainder);
     }
 
+    #[\Override]
     public function getSourceLanguage(): string
     {
         return $this->sourceLanguage;
     }
 
+    #[\Override]
     public function getTargetLanguage(): string
     {
         return $this->targetLanguage;

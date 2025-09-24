@@ -33,6 +33,7 @@ class ReferencedJobDefinition extends Definition
         $this->configuration = $configuration;
     }
 
+    #[\Override]
     public function getDelegated(): Definition
     {
         return $this->configuration->getJob($this->getName());

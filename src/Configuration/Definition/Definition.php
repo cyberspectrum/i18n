@@ -88,6 +88,7 @@ class Definition implements IteratorAggregate
     }
 
     /** Get an iterator over the internal array. */
+    #[\Override]
     public function getIterator(): Traversable
     {
         return new ArrayIterator($this->getData());

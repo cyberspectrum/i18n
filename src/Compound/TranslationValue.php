@@ -34,6 +34,7 @@ class TranslationValue implements TranslationValueInterface
      *
      * @return string
      */
+    #[\Override]
     public function getKey(): string
     {
         return $this->prefix . '.' . $this->delegate->getKey();
@@ -44,6 +45,7 @@ class TranslationValue implements TranslationValueInterface
      *
      * @return string
      */
+    #[\Override]
     public function getSource(): ?string
     {
         return $this->delegate->getSource();
@@ -54,6 +56,7 @@ class TranslationValue implements TranslationValueInterface
      *
      * @return string|null
      */
+    #[\Override]
     public function getTarget(): ?string
     {
         return $this->delegate->getTarget();
@@ -64,6 +67,7 @@ class TranslationValue implements TranslationValueInterface
      *
      * @return bool
      */
+    #[\Override]
     public function isSourceEmpty(): bool
     {
         return $this->delegate->isSourceEmpty();
@@ -72,6 +76,7 @@ class TranslationValue implements TranslationValueInterface
     /**
      * Check if the target value is empty.
      */
+    #[\Override]
     public function isTargetEmpty(): bool
     {
         return $this->delegate->isTargetEmpty();

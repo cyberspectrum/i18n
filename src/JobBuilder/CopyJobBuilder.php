@@ -27,6 +27,7 @@ class CopyJobBuilder implements JobBuilderInterface
      *
      * @throws InvalidArgumentException When the passed definition is not a CopyJobDefinition.
      */
+    #[\Override]
     public function build(JobFactory $factory, Definition $definition): TranslationJobInterface
     {
         if ($definition instanceof ReferencedJobDefinition) {
