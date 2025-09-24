@@ -26,6 +26,8 @@ use function is_string;
  *   name: string,
  *   dictionaries: array<string, TCompoundDictionaryConfiguration>,
  * }
+ *
+ * @api
  */
 final class CompoundDictionaryDefinitionBuilder implements DefinitionBuilderInterface
 {

@@ -15,6 +15,8 @@ use Traversable;
  * @template-covariant TDataArray of array<string, mixed>
  *
  * @implements IteratorAggregate<string, mixed>
+ *
+ * @api
  */
 class Definition implements IteratorAggregate
 {

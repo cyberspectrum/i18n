@@ -20,6 +20,8 @@ use UnexpectedValueException;
 /**
  * This builds translation jobs.
  *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 final class JobFactory

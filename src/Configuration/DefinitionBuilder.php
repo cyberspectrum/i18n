@@ -21,6 +21,8 @@ use Symfony\Component\DependencyInjection\ServiceLocator;
  *   type: string,
  *   ...<string, mixed>
  * }
+ *
+ * @api
  */
 final class DefinitionBuilder
 {
@@ -37,7 +39,7 @@ final class DefinitionBuilder
     }
 
     /**
-     * Build a job.
+     * Build a dictionary.
      *
      * @param Configuration                           $configuration The configuration to populate.
      * @param TDictionaryDefinitionConfigurationArray $data          The configuration values to use.

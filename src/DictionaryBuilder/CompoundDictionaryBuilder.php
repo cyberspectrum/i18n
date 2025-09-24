@@ -14,6 +14,8 @@ use CyberSpectrum\I18N\Job\JobFactory;
 
 /**
  * This builds compound dictionaries.
+ *
+ * @api
  */
 final class CompoundDictionaryBuilder implements DictionaryBuilderInterface
 {

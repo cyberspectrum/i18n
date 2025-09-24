@@ -14,6 +14,8 @@ use Traversable;
 
 /**
  * This is a compound dictionary.
+ *
+ * @api
  */
 class CompoundDictionary implements DictionaryInterface
 {

@@ -10,6 +10,8 @@ use InvalidArgumentException;
 
 /**
  * This is builder can create definitions from data.
+ *
+ * @api
  */
 interface DefinitionBuilderInterface
 {

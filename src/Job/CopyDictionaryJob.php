@@ -19,6 +19,8 @@ use Throwable;
 /**
  * This copies the translations from one dictionary to another one.
  *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 final class CopyDictionaryJob implements TranslationJobInterface, LoggerAwareInterface

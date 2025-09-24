@@ -11,6 +11,8 @@ use CyberSpectrum\I18N\Configuration\Configuration;
  *
  * @psalm-type TReferencedJobDefinitionConfigurationArray=array<string, mixed>
  * @extends Definition<TReferencedJobDefinitionConfigurationArray>
+ *
+ * @api
  */
 final class ReferencedJobDefinition extends Definition
 {

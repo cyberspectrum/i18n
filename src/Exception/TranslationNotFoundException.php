@@ -9,6 +9,8 @@ use Throwable;
 
 /**
  * This exception is thrown when ever a translation was not found.
+ *
+ * @api
  */
 final class TranslationNotFoundException extends \RuntimeException
 {

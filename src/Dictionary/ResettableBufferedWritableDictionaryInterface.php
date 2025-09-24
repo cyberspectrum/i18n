@@ -9,6 +9,8 @@ use RuntimeException;
 /**
  * This interface describes a dictionary that can revert buffered updates.
  *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.LongClassName)
  */
 interface ResettableBufferedWritableDictionaryInterface

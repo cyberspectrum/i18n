@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace CyberSpectrum\I18N\TranslationValue;
 
-/** This interface describes a translation value. */
+/**
+ * This interface describes a translation value.
+ *
+ * @api
+ */
 interface TranslationValueInterface
 {
     /** Obtain the translation key (this might be the same as the source value in some implementations). */

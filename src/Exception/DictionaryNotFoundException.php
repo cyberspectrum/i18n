@@ -6,6 +6,8 @@ namespace CyberSpectrum\I18N\Exception;
 
 /**
  * This exception is thrown when a dictionary has not been found by a provider.
+ *
+ * @api
  */
 final class DictionaryNotFoundException extends \RuntimeException
 {

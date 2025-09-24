@@ -11,6 +11,8 @@ use Traversable;
 
 /**
  * This interface describes a dictionary.
+ *
+ * @api
  */
 interface DictionaryInterface
 {

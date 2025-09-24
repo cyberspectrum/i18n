@@ -8,6 +8,8 @@ use function sprintf;
 
 /**
  * This class provides information about a dictionary.
+ *
+ * @api
  */
 final class DictionaryInformation
 {

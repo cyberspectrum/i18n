@@ -14,6 +14,8 @@ use InvalidArgumentException;
 
 /**
  * This creates a copy job from a job definition.
+ *
+ * @api
  */
 final class CopyJobBuilder implements JobBuilderInterface
 {

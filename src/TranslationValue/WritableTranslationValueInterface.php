@@ -6,6 +6,8 @@ namespace CyberSpectrum\I18N\TranslationValue;
 
 /**
  * This interface describes a writable translation value.
+ *
+ * @api
  */
 interface WritableTranslationValueInterface extends TranslationValueInterface
 {

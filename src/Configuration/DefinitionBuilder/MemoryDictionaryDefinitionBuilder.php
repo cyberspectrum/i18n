@@ -15,6 +15,8 @@ use InvalidArgumentException;
  * @psalm-type TMemoryDictionaryConfigurationArray=array{
  *   name: string,
  * }
+ *
+ * @api
  */
 final class MemoryDictionaryDefinitionBuilder implements DefinitionBuilderInterface
 {

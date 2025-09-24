@@ -12,6 +12,8 @@ use CyberSpectrum\I18N\Configuration\Configuration;
  * @psalm-import-type TDictionaryDefinitionConfigurationArray from DictionaryDefinition
  *
  * @extends DictionaryDefinition<TDictionaryDefinitionConfigurationArray>
+ *
+ * @api
  */
 final class ExtendedDictionaryDefinition extends DictionaryDefinition
 {

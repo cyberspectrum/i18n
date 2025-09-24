@@ -10,6 +10,8 @@ use Throwable;
 
 /**
  * This exception is thrown by dictionaries.
+ *
+ * @api
  */
 abstract class AbstractDictionaryException extends RuntimeException
 {

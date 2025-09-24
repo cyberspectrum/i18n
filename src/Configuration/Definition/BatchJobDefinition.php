@@ -9,6 +9,8 @@ namespace CyberSpectrum\I18N\Configuration\Definition;
  *
  * @psalm-type TBatchJobDefinitionConfigurationArray=array<string, mixed>
  * @extends Definition<TBatchJobDefinitionConfigurationArray>
+ *
+ * @api
  */
 final class BatchJobDefinition extends Definition
 {

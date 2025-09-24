@@ -9,6 +9,8 @@ use InvalidArgumentException;
 
 /**
  * This stores a config.
+ *
+ * @api
  */
 final class Configuration
 {

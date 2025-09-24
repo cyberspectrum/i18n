@@ -14,6 +14,8 @@ use InvalidArgumentException;
 
 /**
  * This creates a batch job from a job definition.
+ *
+ * @api
  */
 final class BatchJobBuilder implements JobBuilderInterface
 {

@@ -10,6 +10,8 @@ use Symfony\Component\DependencyInjection\ServiceLocator;
 
 /**
  * This builds translation jobs.
+ *
+ * @api
  */
 final class JobFactoryFactory
 {

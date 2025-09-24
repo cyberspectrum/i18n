@@ -27,6 +27,8 @@ use function array_key_exists;
  *   source_language?: string,
  *   target_language?: string,
  * }
+ *
+ * @api
  */
 final class CopyJobDefinitionBuilder implements DefinitionBuilderInterface
 {

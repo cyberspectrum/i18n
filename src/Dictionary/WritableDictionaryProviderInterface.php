@@ -10,6 +10,8 @@ use Traversable;
 
 /**
  * This interface describes a dictionary provider for writable dictionaries.
+ *
+ * @api
  */
 interface WritableDictionaryProviderInterface
 {

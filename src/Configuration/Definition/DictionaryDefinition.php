@@ -21,6 +21,8 @@ use RuntimeException;
  * @template-covariant TDataArray of TDictionaryDefinitionConfigurationArray
  *
  * @extends Definition<TDataArray>
+ *
+ * @api
  */
 class DictionaryDefinition extends Definition
 {

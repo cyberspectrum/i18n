@@ -10,6 +10,8 @@ namespace CyberSpectrum\I18N\Configuration\Definition;
  * @psalm-import-type TDictionaryDefinitionConfigurationArray from DictionaryDefinition
  * @psalm-type TCopyJobDefinitionConfigurationArray=array<string, mixed>
  * @extends Definition<TCopyJobDefinitionConfigurationArray>
+ *
+ * @api
  */
 final class CopyJobDefinition extends Definition
 {

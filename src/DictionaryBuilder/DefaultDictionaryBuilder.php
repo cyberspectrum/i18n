@@ -17,6 +17,8 @@ use UnexpectedValueException;
 
 /**
  * This builds dictionaries from the configured providers.
+ *
+ * @api
  */
 final class DefaultDictionaryBuilder implements DictionaryBuilderInterface
 {

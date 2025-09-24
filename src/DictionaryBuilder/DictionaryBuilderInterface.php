@@ -11,6 +11,8 @@ use CyberSpectrum\I18N\Job\JobFactory;
 
 /**
  * This describes a dictionary builder.
+ *
+ * @api
  */
 interface DictionaryBuilderInterface
 {

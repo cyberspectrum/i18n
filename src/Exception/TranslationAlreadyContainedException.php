@@ -9,6 +9,8 @@ use Throwable;
 
 /**
  * This exception is thrown when ever a translation is already contained.
+ *
+ * @api
  */
 final class TranslationAlreadyContainedException extends AbstractDictionaryException
 {

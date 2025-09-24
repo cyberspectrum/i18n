@@ -10,6 +10,8 @@ namespace CyberSpectrum\I18N\Configuration\Definition;
  * @psalm-import-type TDictionaryDefinitionConfigurationArray from DictionaryDefinition
  *
  * @extends DictionaryDefinition<TDictionaryDefinitionConfigurationArray>
+ *
+ * @api
  */
 final class DecoratedDictionaryDefinition extends DictionaryDefinition
 {

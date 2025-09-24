@@ -9,6 +9,8 @@ use Traversable;
 
 /**
  * This interface describes a dictionary provider.
+ *
+ * @api
  */
 interface DictionaryProviderInterface
 {

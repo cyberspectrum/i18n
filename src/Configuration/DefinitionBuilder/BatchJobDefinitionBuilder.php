@@ -22,6 +22,8 @@ use InvalidArgumentException;
  *   name: string,
  *   jobs: array<int, TBatchJobConfiguration>,
  * }
+ *
+ * @api
  */
 final class BatchJobDefinitionBuilder implements DefinitionBuilderInterface
 {

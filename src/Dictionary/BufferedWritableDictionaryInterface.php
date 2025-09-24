@@ -13,6 +13,8 @@ use RuntimeException;
  * calling `commitBuffer()`.
  *
  * This eases disk I/O on batch modifications but will consume more memory.
+ *
+ * @api
  */
 interface BufferedWritableDictionaryInterface
 {
