@@ -1,23 +1,6 @@
 <?php
 
-/**
- * This file is part of cyberspectrum/i18n.
- *
- * (c) 2018 CyberSpectrum.
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * This project is provided in good faith and hope to be usable by anyone.
- *
- * @package    cyberspectrum/i18n
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2018 CyberSpectrum.
- * @license    https://github.com/cyberspectrum/i18n/blob/master/LICENSE MIT
- * @filesource
- */
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace CyberSpectrum\I18N\Compound;
 
@@ -28,19 +11,11 @@ use CyberSpectrum\I18N\TranslationValue\TranslationValueInterface;
  */
 class TranslationValue implements TranslationValueInterface
 {
-    /**
-     * The prefix.
-     *
-     * @var string
-     */
-    protected $prefix;
+    /** The prefix. */
+    protected string $prefix;
 
-    /**
-     * The delegate.
-     *
-     * @var TranslationValueInterface
-     */
-    protected $delegate;
+    /** The delegate. */
+    protected TranslationValueInterface $delegate;
 
     /**
      * Create a new instance.
@@ -59,6 +34,7 @@ class TranslationValue implements TranslationValueInterface
      *
      * @return string
      */
+    #[\Override]
     public function getKey(): string
     {
         return $this->prefix . '.' . $this->delegate->getKey();
@@ -69,6 +45,7 @@ class TranslationValue implements TranslationValueInterface
      *
      * @return string
      */
+    #[\Override]
     public function getSource(): ?string
     {
         return $this->delegate->getSource();
@@ -79,6 +56,7 @@ class TranslationValue implements TranslationValueInterface
      *
      * @return string|null
      */
+    #[\Override]
     public function getTarget(): ?string
     {
         return $this->delegate->getTarget();
@@ -89,6 +67,7 @@ class TranslationValue implements TranslationValueInterface
      *
      * @return bool
      */
+    #[\Override]
     public function isSourceEmpty(): bool
     {
         return $this->delegate->isSourceEmpty();
@@ -96,9 +75,8 @@ class TranslationValue implements TranslationValueInterface
 
     /**
      * Check if the target value is empty.
-     *
-     * @return bool
      */
+    #[\Override]
     public function isTargetEmpty(): bool
     {
         return $this->delegate->isTargetEmpty();

@@ -1,23 +1,6 @@
 <?php
 
-/**
- * This file is part of cyberspectrum/i18n.
- *
- * (c) 2018 CyberSpectrum.
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * This project is provided in good faith and hope to be usable by anyone.
- *
- * @package    cyberspectrum/i18n
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2018 CyberSpectrum.
- * @license    https://github.com/cyberspectrum/i18n/blob/master/LICENSE MIT
- * @filesource
- */
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace CyberSpectrum\I18N\DictionaryBuilder;
 
@@ -31,8 +14,10 @@ use CyberSpectrum\I18N\Job\JobFactory;
 
 /**
  * This builds compound dictionaries.
+ *
+ * @api
  */
-class CompoundDictionaryBuilder implements DictionaryBuilderInterface
+final class CompoundDictionaryBuilder implements DictionaryBuilderInterface
 {
     /**
      * Build a dictionary from the passed definition.
@@ -42,6 +27,7 @@ class CompoundDictionaryBuilder implements DictionaryBuilderInterface
      *
      * @return DictionaryInterface
      */
+    #[\Override]
     public function build(JobFactory $factory, DictionaryDefinition $definition): DictionaryInterface
     {
         $dictionary = new CompoundDictionary($definition->getSourceLanguage(), $definition->getTargetLanguage());
@@ -50,9 +36,11 @@ class CompoundDictionaryBuilder implements DictionaryBuilderInterface
             'target_language' => $definition->getTargetLanguage()
         ];
         foreach ($definition->get('dictionaries') as $child) {
-            /** @var DictionaryDefinition $child */
+            assert($child instanceof DictionaryDefinition);
+            $prefix = $child->get('prefix');
+            assert(is_string($prefix));
             $dictionary->addDictionary(
-                $child->get('prefix'),
+                $prefix,
                 $factory->createDictionary(new DecoratedDictionaryDefinition($child, $overrides))
             );
         }
@@ -68,6 +56,7 @@ class CompoundDictionaryBuilder implements DictionaryBuilderInterface
      *
      * @return WritableDictionaryInterface
      */
+    #[\Override]
     public function buildWritable(JobFactory $factory, DictionaryDefinition $definition): WritableDictionaryInterface
     {
         $dictionary = new WritableCompoundDictionary(
@@ -80,9 +69,11 @@ class CompoundDictionaryBuilder implements DictionaryBuilderInterface
             'target_language' => $definition->getTargetLanguage()
         ];
         foreach ($definition->get('dictionaries') as $child) {
-            /** @var DictionaryDefinition $child */
+            assert($child instanceof DictionaryDefinition);
+            $prefix = $child->get('prefix');
+            assert(is_string($prefix));
             $dictionary->addDictionary(
-                $child->get('prefix'),
+                $prefix,
                 $factory->createWritableDictionary(new DecoratedDictionaryDefinition($child, $overrides))
             );
         }

@@ -1,23 +1,6 @@
 <?php
 
-/**
- * This file is part of cyberspectrum/i18n.
- *
- * (c) 2018 CyberSpectrum.
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * This project is provided in good faith and hope to be usable by anyone.
- *
- * @package    cyberspectrum/i18n
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2018 CyberSpectrum.
- * @license    https://github.com/cyberspectrum/i18n/blob/master/LICENSE MIT
- * @filesource
- */
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace CyberSpectrum\I18N\Memory;
 
@@ -26,32 +9,28 @@ use CyberSpectrum\I18N\Exception\TranslationAlreadyContainedException;
 use CyberSpectrum\I18N\Exception\TranslationNotFoundException;
 use CyberSpectrum\I18N\TranslationValue\TranslationValueInterface;
 use CyberSpectrum\I18N\TranslationValue\WritableTranslationValueInterface;
+use InvalidArgumentException;
+use Traversable;
 
 /**
- * This is a simple static memory implementation of a dictionary..
+ * This is a simple static memory implementation of a dictionary.
+ *
+ * @psalm-type TMemoryDictionaryTranslationItem = array{source?: string, target?: string}
  */
-class MemoryDictionary implements WritableDictionaryInterface
+final class MemoryDictionary implements WritableDictionaryInterface
 {
     /**
      * The translation buffer.
      *
-     * @var MemoryTranslationValue[]
+     * @var array<string, MemoryTranslationValue>
      */
-    protected $translationBuffer = [];
+    protected array $translationBuffer = [];
 
-    /**
-     * The source language.
-     *
-     * @var string
-     */
-    private $sourceLanguage;
+    /** The source language. */
+    private string $sourceLanguage;
 
-    /**
-     * The target language.
-     *
-     * @var string
-     */
-    private $targetLanguage;
+    /** The target language. */
+    private string $targetLanguage;
 
     /**
      * Create a new instance.
@@ -64,78 +43,76 @@ class MemoryDictionary implements WritableDictionaryInterface
      *   ]
      * ]
      *
-     * @param string $sourceLanguage    The source language.
-     * @param string $targetLanguage    The target language.
-     * @param array  $translationBuffer The translation buffer.
+     * @param string               $sourceLanguage    The source language.
+     * @param string               $targetLanguage    The target language.
+     * @param array<string, array> $translationBuffer The translation buffer.
      */
     public function __construct(string $sourceLanguage, string $targetLanguage, array $translationBuffer)
     {
         $this->sourceLanguage = $sourceLanguage;
         $this->targetLanguage = $targetLanguage;
         foreach ($translationBuffer as $key => $item) {
-            $this->addItem($key, $item);
+            if (array_key_exists('source', $item) && array_key_exists('target', $item)) {
+                /** @var mixed $source */
+                $source = $item['source'] ?? null;
+                /** @var mixed $target */
+                $target = $item['target'] ?? null;
+                if (
+                    (is_string($source) || null === $source)
+                    && (is_string($target) || null === $target)
+                ) {
+                    $this->addItem($key, $source, $target);
+                    continue;
+                }
+            }
+
+            throw new InvalidArgumentException('Invalid translation array: ' . var_export($item, true));
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function keys(): \Traversable
+    #[\Override]
+    public function keys(): Traversable
     {
-        return new \ArrayIterator(array_keys($this->translationBuffer));
+        foreach ($this->translationBuffer as $key => $_ignored) {
+            yield $key;
+        }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function get(string $key): TranslationValueInterface
     {
         return $this->getWritable($key);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function has(string $key): bool
     {
         return array_key_exists($key, $this->translationBuffer);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getSourceLanguage(): string
     {
         return $this->sourceLanguage;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getTargetLanguage(): string
     {
         return $this->targetLanguage;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @throws TranslationAlreadyContainedException When the translation already exists.
-     */
+    #[\Override]
     public function add(string $key): WritableTranslationValueInterface
     {
         if ($this->has($key)) {
             throw new TranslationAlreadyContainedException($key, $this);
         }
 
-        return $this->translationBuffer[$key] = new MemoryTranslationValue($key);
+        return $this->addItem($key, null, null);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @throws TranslationNotFoundException When the translation does not exist.
-     */
+    #[\Override]
     public function remove(string $key): void
     {
         if (!$this->has($key)) {
@@ -145,12 +122,8 @@ class MemoryDictionary implements WritableDictionaryInterface
         unset($this->translationBuffer[$key]);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @throws TranslationNotFoundException When the translation does not exist.
-     */
-    public function getWritable($key): WritableTranslationValueInterface
+    #[\Override]
+    public function getWritable(string $key): WritableTranslationValueInterface
     {
         if (!$this->has($key)) {
             throw new TranslationNotFoundException($key, $this);
@@ -162,19 +135,14 @@ class MemoryDictionary implements WritableDictionaryInterface
     /**
      * Add an element with the passed values.
      *
-     * @param string $key    The key to add.
-     * @param array  $values The values to use.
+     * @param string      $key    The key to add.
+     * @param string|null $source The value to use as source.
+     * @param string|null $target The value to use as target.
      *
-     * @return void
-     *
-     * @throws \InvalidArgumentException When the passed array is invalid.
+     * @throws InvalidArgumentException When the passed array is invalid.
      */
-    protected function addItem(string $key, array $values): void
+    protected function addItem(string $key, ?string $source, ?string $target): MemoryTranslationValue
     {
-        if (!array_key_exists('source', $values) || !array_key_exists('target', $values)) {
-            throw new \InvalidArgumentException('Invalid translation array: ' . var_export($values, true));
-        }
-
-        $this->translationBuffer[$key] = new MemoryTranslationValue($key, $values['source'], $values['target']);
+        return $this->translationBuffer[$key] = new MemoryTranslationValue($key, $source, $target);
     }
 }

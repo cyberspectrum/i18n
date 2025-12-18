@@ -1,23 +1,6 @@
 <?php
 
-/**
- * This file is part of cyberspectrum/i18n.
- *
- * (c) 2018 CyberSpectrum.
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * This project is provided in good faith and hope to be usable by anyone.
- *
- * @package    cyberspectrum/i18n
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2018 CyberSpectrum.
- * @license    https://github.com/cyberspectrum/i18n/blob/master/LICENSE MIT
- * @filesource
- */
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace CyberSpectrum\I18N\Job;
 
@@ -30,40 +13,30 @@ use CyberSpectrum\I18N\DictionaryBuilder\DictionaryBuilderInterface;
 use CyberSpectrum\I18N\JobBuilder\JobBuilderInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 use Symfony\Component\DependencyInjection\ServiceLocator;
+use UnexpectedValueException;
 
 /**
  * This builds translation jobs.
+ *
+ * @api
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class JobFactory
+final class JobFactory
 {
-    /**
-     * The dictionary builders.
-     *
-     * @var ServiceLocator
-     */
-    private $dictionaryBuilders;
+    /** The dictionary builders. */
+    private ServiceLocator $dictionaryBuilders;
 
-    /**
-     * The job type builders.
-     *
-     * @var ServiceLocator
-     */
-    private $jobBuilders;
+    /** The job type builders. */
+    private ServiceLocator $jobBuilders;
 
-    /**
-     * The configuration.
-     *
-     * @var Configuration
-     */
-    private $configuration;
+    /** The configuration. */
+    private Configuration $configuration;
 
-    /**
-     * The logger.
-     *
-     * @var LoggerInterface
-     */
-    private $logger;
+    /** The logger. */
+    private LoggerInterface $logger;
 
     /**
      * Create a new instance.
@@ -88,7 +61,7 @@ class JobFactory
     /**
      * Obtain the job names.
      *
-     * @return array
+     * @return list<string>
      */
     public function getJobNames(): array
     {
@@ -100,14 +73,12 @@ class JobFactory
      *
      * @param string $name The name of the job to get.
      *
-     * @return TranslationJobInterface
-     *
-     * @throws \UnexpectedValueException When the requested job is not configured.
+     * @throws UnexpectedValueException When the requested job is not configured.
      */
     public function createJobByName(string $name): TranslationJobInterface
     {
         if (!$this->configuration->hasJob($name)) {
-            throw new \UnexpectedValueException('Job "' . $name . '" not found in configuration');
+            throw new UnexpectedValueException('Job "' . $name . '" not found in configuration');
         }
 
         return $this->createJob($this->configuration->getJob($name));
@@ -118,18 +89,20 @@ class JobFactory
      *
      * @param Definition $configuration The job definition.
      *
-     * @return TranslationJobInterface
-     *
-     * @throws \UnexpectedValueException When the requested job is not configured.
+     * @throws UnexpectedValueException When the requested job is not configured.
      */
     public function createJob(Definition $configuration): TranslationJobInterface
     {
-        if (!$this->jobBuilders->has($type = $configuration->get('type'))) {
-            throw new \UnexpectedValueException('Unknown job type "' . $type . '"');
+        $type = $configuration->get('type');
+        if (!is_string($type) || !$this->jobBuilders->has($type)) {
+            throw new UnexpectedValueException('Unknown job type ' . var_export($type, true));
         }
 
         $builder = $this->jobBuilders->get($type);
-        /** @var JobBuilderInterface $builder */
+        if (!$builder instanceof JobBuilderInterface) {
+            throw new RuntimeException('Invalid job builder registered for type ' . $type);
+        }
+
         $job = $builder->build($this, $configuration);
         if ($job instanceof LoggerAwareInterface) {
             $job->setLogger($this->logger);
@@ -142,14 +115,11 @@ class JobFactory
      * Create a dictionary.
      *
      * @param DictionaryDefinition $definition The dictionary configuration.
-     *
-     * @return DictionaryInterface
      */
     public function createDictionary(DictionaryDefinition $definition): DictionaryInterface
     {
         $builder = $this->getDictionaryBuilder($definition);
 
-        /** @var DictionaryBuilderInterface $builder */
         return $builder->build($this, $definition);
     }
 
@@ -157,14 +127,11 @@ class JobFactory
      * Create a dictionary.
      *
      * @param DictionaryDefinition $definition The dictionary configuration.
-     *
-     * @return WritableDictionaryInterface
      */
     public function createWritableDictionary(DictionaryDefinition $definition): WritableDictionaryInterface
     {
         $builder = $this->getDictionaryBuilder($definition);
 
-        /** @var DictionaryBuilderInterface $builder */
         return $builder->buildWritable($this, $definition);
     }
 
@@ -172,15 +139,17 @@ class JobFactory
      * Get a dictionary builder for the passed definition.
      *
      * @param DictionaryDefinition $definition The definition.
-     *
-     * @return DictionaryBuilderInterface
      */
     private function getDictionaryBuilder(DictionaryDefinition $definition): DictionaryBuilderInterface
     {
         if (!$this->dictionaryBuilders->has($typeName = $definition->getType())) {
             $typeName = 'default';
         }
+        $builder = $this->dictionaryBuilders->get($typeName);
+        if (!$builder instanceof DictionaryBuilderInterface) {
+            throw new RuntimeException('Invalid dictionary builder registered for type ' . $typeName);
+        }
 
-        return $this->dictionaryBuilders->get($typeName);
+        return $builder;
     }
 }

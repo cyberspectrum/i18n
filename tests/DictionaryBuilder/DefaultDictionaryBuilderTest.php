@@ -1,23 +1,6 @@
 <?php
 
-/**
- * This file is part of cyberspectrum/i18n.
- *
- * (c) 2018 CyberSpectrum.
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * This project is provided in good faith and hope to be usable by anyone.
- *
- * @package    cyberspectrum/i18n
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2018 CyberSpectrum.
- * @license    https://github.com/cyberspectrum/i18n/blob/master/LICENSE MIT
- * @filesource
- */
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace CyberSpectrum\I18N\Test\DictionaryBuilder;
 
@@ -29,28 +12,25 @@ use CyberSpectrum\I18N\Exception\DictionaryNotFoundException;
 use CyberSpectrum\I18N\Configuration\Definition\DictionaryDefinition;
 use CyberSpectrum\I18N\DictionaryBuilder\DefaultDictionaryBuilder;
 use CyberSpectrum\I18N\Job\JobFactory;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Symfony\Component\DependencyInjection\ServiceLocator;
+use UnexpectedValueException;
 
-/**
- * This tests the default dictionary builder.
- *
- * @covers \CyberSpectrum\I18N\DictionaryBuilder\DefaultDictionaryBuilder
- */
+#[CoversClass(DefaultDictionaryBuilder::class)]
 class DefaultDictionaryBuilderTest extends TestCase
 {
-    /**
-     * Test.
-     *
-     * @return void
-     */
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetDictionary(): void
     {
-        $provider   = $this->getMockForAbstractClass(DictionaryProviderInterface::class);
+        $provider   = $this->getMockBuilder(DictionaryProviderInterface::class)->getMock();
         $providers  = new ServiceLocator(['test' => function () use ($provider) {
             return $provider;
         }]);
-        $dictionary = $this->getMockForAbstractClass(DictionaryInterface::class);
+        $dictionary = $this->getMockBuilder(DictionaryInterface::class)->getMock();
         $definition = new DictionaryDefinition(
             'test',
             [
@@ -79,17 +59,13 @@ class DefaultDictionaryBuilderTest extends TestCase
             )
             ->willReturn($dictionary);
 
-        $this->assertSame($dictionary, $instance->build($this->mockJobFactory(), $definition));
+        self::assertSame($dictionary, $instance->build($this->mockJobFactory(), $definition));
     }
 
-    /**
-     * Test.
-     *
-     * @return void
-     */
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetDictionaryThrowsForWriteOnlyProvider(): void
     {
-        $provider   = $this->getMockForAbstractClass(WritableDictionaryInterface::class);
+        $provider   = $this->getMockBuilder(WritableDictionaryProviderInterface::class)->getMock();
         $providers  = new ServiceLocator(['test' => function () use ($provider) {
             return $provider;
         }]);
@@ -103,18 +79,14 @@ class DefaultDictionaryBuilderTest extends TestCase
             ]
         );
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Dictionary provider "test" can not create readable dictionaries.');
 
         $instance = new DefaultDictionaryBuilder($providers);
         $instance->build($this->mockJobFactory(), $definition);
     }
 
-    /**
-     * Test.
-     *
-     * @return void
-     */
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetDictionaryThrowsForUnknownProvider(): void
     {
         $providers  = new ServiceLocator([]);
@@ -128,21 +100,17 @@ class DefaultDictionaryBuilderTest extends TestCase
             ]
         );
 
-        $this->expectException(\UnexpectedValueException::class);
+        $this->expectException(UnexpectedValueException::class);
         $this->expectExceptionMessage('No provider named "test" registered.');
 
         $instance = new DefaultDictionaryBuilder($providers);
         $instance->build($this->mockJobFactory(), $definition);
     }
 
-    /**
-     * Test.
-     *
-     * @return void
-     */
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetDictionaryForWriteThrowsForReadOnlyProvider(): void
     {
-        $provider   = $this->getMockForAbstractClass(DictionaryProviderInterface::class);
+        $provider   = $this->getMockBuilder(DictionaryProviderInterface::class)->getMock();
         $providers  = new ServiceLocator(['test' => function () use ($provider) {
             return $provider;
         }]);
@@ -156,18 +124,14 @@ class DefaultDictionaryBuilderTest extends TestCase
             ]
         );
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Dictionary provider "test" can not create writable dictionaries.');
 
         $instance = new DefaultDictionaryBuilder($providers);
         $instance->buildWritable($this->mockJobFactory(), $definition);
     }
 
-    /**
-     * Test.
-     *
-     * @return void
-     */
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetDictionaryForWriteThrowsForUnknownProvider(): void
     {
         $providers  = new ServiceLocator([]);
@@ -181,25 +145,21 @@ class DefaultDictionaryBuilderTest extends TestCase
             ]
         );
 
-        $this->expectException(\UnexpectedValueException::class);
+        $this->expectException(UnexpectedValueException::class);
         $this->expectExceptionMessage('No provider named "test" registered.');
 
         $instance = new DefaultDictionaryBuilder($providers);
         $instance->buildWritable($this->mockJobFactory(), $definition);
     }
 
-    /**
-     * Test.
-     *
-     * @return void
-     */
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetDictionaryForWrite(): void
     {
-        $provider      = $this->getMockForAbstractClass(WritableDictionaryProviderInterface::class);
+        $provider      = $this->getMockBuilder(WritableDictionaryProviderInterface::class)->getMock();
         $providers     = new ServiceLocator(['test' => function () use ($provider) {
             return $provider;
         }]);
-        $dictionary    = $this->getMockForAbstractClass(WritableDictionaryInterface::class);
+        $dictionary    = $this->getMockBuilder(WritableDictionaryInterface::class)->getMock();
         $definition    = new DictionaryDefinition(
             'test',
             [
@@ -227,21 +187,17 @@ class DefaultDictionaryBuilderTest extends TestCase
             ->willReturn($dictionary);
 
         $instance = new DefaultDictionaryBuilder($providers);
-        $this->assertSame($dictionary, $instance->buildWritable($this->mockJobFactory(), $definition));
+        self::assertSame($dictionary, $instance->buildWritable($this->mockJobFactory(), $definition));
     }
 
-    /**
-     * Test.
-     *
-     * @return void
-     */
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetDictionaryForWriteWillCreateNewIfNotFound(): void
     {
-        $provider      = $this->getMockForAbstractClass(WritableDictionaryProviderInterface::class);
+        $provider      = $this->getMockBuilder(WritableDictionaryProviderInterface::class)->getMock();
         $providers     = new ServiceLocator(['test' => function () use ($provider) {
             return $provider;
         }]);
-        $dictionary    = $this->getMockForAbstractClass(WritableDictionaryInterface::class);
+        $dictionary    = $this->getMockBuilder(WritableDictionaryInterface::class)->getMock();
         $definition    = new DictionaryDefinition(
             'test',
             [
@@ -284,18 +240,16 @@ class DefaultDictionaryBuilderTest extends TestCase
             ->willReturn($dictionary);
 
         $instance = new DefaultDictionaryBuilder($providers);
-        $this->assertSame($dictionary, $instance->buildWritable($this->mockJobFactory(), $definition));
+        self::assertSame($dictionary, $instance->buildWritable($this->mockJobFactory(), $definition));
     }
 
     /**
      * Mock a job factory.
      *
-     * @return \PHPUnit\Framework\MockObject\MockObject|JobFactory
+     * @return MockObject|JobFactory
      */
-    private function mockJobFactory(): \PHPUnit\Framework\MockObject\MockObject
+    private function mockJobFactory(): MockObject
     {
-        $jobBuilder = $this->getMockBuilder(JobFactory::class)->disableOriginalConstructor()->getMock();
-
-        return $jobBuilder;
+        return $this->getMockBuilder(JobFactory::class)->disableOriginalConstructor()->getMock();
     }
 }

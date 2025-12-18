@@ -1,23 +1,6 @@
 <?php
 
-/**
- * This file is part of cyberspectrum/i18n.
- *
- * (c) 2018 CyberSpectrum.
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * This project is provided in good faith and hope to be usable by anyone.
- *
- * @package    cyberspectrum/i18n
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2018 CyberSpectrum.
- * @license    https://github.com/cyberspectrum/i18n/blob/master/LICENSE MIT
- * @filesource
- */
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace CyberSpectrum\I18N\JobBuilder;
 
@@ -27,11 +10,14 @@ use CyberSpectrum\I18N\Job\TranslationJobInterface;
 use CyberSpectrum\I18N\Configuration\Definition\Definition;
 use CyberSpectrum\I18N\Configuration\Definition\CopyJobDefinition;
 use CyberSpectrum\I18N\Job\JobFactory;
+use InvalidArgumentException;
 
 /**
  * This creates a copy job from a job definition.
+ *
+ * @api
  */
-class CopyJobBuilder implements JobBuilderInterface
+final class CopyJobBuilder implements JobBuilderInterface
 {
     /**
      * Build a copy job from the passed definition.
@@ -41,16 +27,17 @@ class CopyJobBuilder implements JobBuilderInterface
      *
      * @return CopyDictionaryJob
      *
-     * @throws \InvalidArgumentException When the passed definition is not a CopyJobDefinition.
+     * @throws InvalidArgumentException When the passed definition is not a CopyJobDefinition.
      */
+    #[\Override]
     public function build(JobFactory $factory, Definition $definition): TranslationJobInterface
     {
         if ($definition instanceof ReferencedJobDefinition) {
-            $definition = $definition->getDelegated();
+            return $this->build($factory, $definition->getDelegated());
         }
 
         if (!$definition instanceof CopyJobDefinition) {
-            throw new \InvalidArgumentException('Invalid definition passed.');
+            throw new InvalidArgumentException('Invalid definition passed.');
         }
 
         $job = new CopyDictionaryJob(
@@ -71,7 +58,9 @@ class CopyJobBuilder implements JobBuilderInterface
         }
 
         if ($definition->has('filter')) {
-            $job->setFilters($definition->get('filter'));
+            /** @var list<string> $filters */
+            $filters = $definition->get('filter');
+            $job->setFilters(...$filters);
         }
 
         return $job;
@@ -80,11 +69,11 @@ class CopyJobBuilder implements JobBuilderInterface
     /**
      * Convert the passed value to a copy flag.
      *
-     * @param string|bool|null $value The value.
+     * @param mixed $value The value.
      *
      * @return int
      *
-     * @throws \InvalidArgumentException When the value can not be converted.
+     * @throws InvalidArgumentException When the value can not be converted.
      */
     private function copyStringToFlag($value): int
     {
@@ -100,18 +89,18 @@ class CopyJobBuilder implements JobBuilderInterface
             case 'if-empty' === $value:
                 return CopyDictionaryJob::COPY_IF_EMPTY;
             default:
-                throw new \InvalidArgumentException('Invalid value for copy flag.');
+                throw new InvalidArgumentException('Invalid value for copy flag.');
         }
     }
 
     /**
      * Convert the passed value to a bool.
      *
-     * @param string|bool|null $value The value.
+     * @param mixed $value The value.
      *
      * @return bool
      *
-     * @throws \InvalidArgumentException When the value can not be converted.
+     * @throws InvalidArgumentException When the value can not be converted.
      */
     private function boolishToFlag($value): bool
     {
@@ -125,7 +114,7 @@ class CopyJobBuilder implements JobBuilderInterface
             case false === $value:
                 return false;
             default:
-                throw new \InvalidArgumentException('Invalid value for remove-obsolete flag.');
+                throw new InvalidArgumentException('Invalid value for remove-obsolete flag.');
         }
     }
 }
