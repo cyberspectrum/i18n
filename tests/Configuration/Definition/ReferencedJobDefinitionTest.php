@@ -7,9 +7,10 @@ namespace CyberSpectrum\I18N\Test\Configuration\Definition;
 use CyberSpectrum\I18N\Configuration\Configuration;
 use CyberSpectrum\I18N\Configuration\Definition\Definition;
 use CyberSpectrum\I18N\Configuration\Definition\ReferencedJobDefinition;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-/** @covers \CyberSpectrum\I18N\Configuration\Definition\ReferencedJobDefinition */
+#[CoversClass(ReferencedJobDefinition::class)]
 class ReferencedJobDefinitionTest extends TestCase
 {
     public function testAllIsWorking(): void

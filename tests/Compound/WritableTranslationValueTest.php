@@ -6,14 +6,15 @@ namespace CyberSpectrum\I18N\Test\Compound;
 
 use CyberSpectrum\I18N\Compound\WritableTranslationValue;
 use CyberSpectrum\I18N\TranslationValue\WritableTranslationValueInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-/** @covers \CyberSpectrum\I18N\Compound\WritableTranslationValue */
+#[CoversClass(WritableTranslationValue::class)]
 class WritableTranslationValueTest extends TestCase
 {
     public function testDelegates(): void
     {
-        $value = $this->getMockForAbstractClass(WritableTranslationValueInterface::class);
+        $value = $this->getMockBuilder(WritableTranslationValueInterface::class)->getMock();
         $value->expects($this->once())->method('setSource')->with('source');
         $value->expects($this->once())->method('setTarget')->with('target');
         $value->expects($this->once())->method('clearSource');

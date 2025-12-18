@@ -12,12 +12,13 @@ use CyberSpectrum\I18N\Exception\TranslationNotFoundException;
 use CyberSpectrum\I18N\Memory\MemoryDictionary;
 use CyberSpectrum\I18N\TranslationValue\TranslationValueInterface;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 use function iterator_to_array;
 
-/** @covers \CyberSpectrum\I18N\Compound\CompoundDictionary */
+#[CoversClass(CompoundDictionary::class)]
 class CompoundDictionaryTest extends TestCase
 {
     public function testLanguages(): void
@@ -32,7 +33,7 @@ class CompoundDictionaryTest extends TestCase
     {
         $compound = new CompoundDictionary('en', 'de');
 
-        $child = $this->getMockForAbstractClass(DictionaryInterface::class);
+        $child = $this->getMockBuilder(DictionaryInterface::class)->getMock();
         $child->expects($this->once())->method('getSourceLanguage')->with()->willReturn('de');
 
         $this->expectException(NotSupportedException::class);
@@ -45,7 +46,7 @@ class CompoundDictionaryTest extends TestCase
     {
         $compound = new CompoundDictionary('en', 'fr');
 
-        $child = $this->getMockForAbstractClass(DictionaryInterface::class);
+        $child = $this->getMockBuilder(DictionaryInterface::class)->getMock();
         $child->expects($this->once())->method('getSourceLanguage')->with()->willReturn('en');
         $child->expects($this->once())->method('getTargetLanguage')->with()->willReturn('de');
 
@@ -59,13 +60,13 @@ class CompoundDictionaryTest extends TestCase
     {
         $compound = new CompoundDictionary('en', 'de');
 
-        $child = $this->getMockForAbstractClass(DictionaryInterface::class);
+        $child = $this->getMockBuilder(DictionaryInterface::class)->getMock();
         $child->expects($this->once())->method('getSourceLanguage')->with()->willReturn('en');
         $child->expects($this->once())->method('getTargetLanguage')->with()->willReturn('de');
 
         $compound->addDictionary('child', $child);
 
-        $child2 = $this->getMockForAbstractClass(DictionaryInterface::class);
+        $child2 = $this->getMockBuilder(DictionaryInterface::class)->getMock();
         $child2->expects($this->never())->method('getSourceLanguage');
         $child2->expects($this->never())->method('getTargetLanguage');
 
@@ -112,7 +113,7 @@ class CompoundDictionaryTest extends TestCase
 
     public function testHas(): void
     {
-        $child = $this->getMockForAbstractClass(DictionaryInterface::class);
+        $child = $this->getMockBuilder(DictionaryInterface::class)->getMock();
         $child->expects($this->once())->method('has')->with('key')->willReturn(true);
         $child->expects($this->once())->method('getSourceLanguage')->with()->willReturn('en');
         $child->expects($this->once())->method('getTargetLanguage')->with()->willReturn('de');
@@ -125,14 +126,14 @@ class CompoundDictionaryTest extends TestCase
 
     public function testGet(): void
     {
-        $value = $this->getMockForAbstractClass(TranslationValueInterface::class);
+        $value = $this->getMockBuilder(TranslationValueInterface::class)->getMock();
         $value->expects($this->once())->method('getKey')->with()->willReturn('key');
         $value->expects($this->once())->method('getSource')->with()->willReturn('source');
         $value->expects($this->once())->method('getTarget')->with()->willReturn('target');
         $value->expects($this->once())->method('isSourceEmpty')->with()->willReturn(false);
         $value->expects($this->once())->method('isTargetEmpty')->with()->willReturn(false);
 
-        $child = $this->getMockForAbstractClass(DictionaryInterface::class);
+        $child = $this->getMockBuilder(DictionaryInterface::class)->getMock();
         $child->expects($this->once())->method('get')->with('key')->willReturn($value);
         $child->expects($this->once())->method('getSourceLanguage')->with()->willReturn('en');
         $child->expects($this->once())->method('getTargetLanguage')->with()->willReturn('de');
@@ -151,7 +152,7 @@ class CompoundDictionaryTest extends TestCase
 
     public function testThrowsForInvalidKey(): void
     {
-        $child = $this->getMockForAbstractClass(DictionaryInterface::class);
+        $child = $this->getMockBuilder(DictionaryInterface::class)->getMock();
         $child->expects($this->never())->method('has');
         $child->expects($this->once())->method('getSourceLanguage')->with()->willReturn('en');
         $child->expects($this->once())->method('getTargetLanguage')->with()->willReturn('de');
@@ -167,7 +168,7 @@ class CompoundDictionaryTest extends TestCase
 
     public function testThrowsForUnknownPrefix(): void
     {
-        $child = $this->getMockForAbstractClass(DictionaryInterface::class);
+        $child = $this->getMockBuilder(DictionaryInterface::class)->getMock();
         $child->expects($this->never())->method('has');
         $child->expects($this->once())->method('getSourceLanguage')->with()->willReturn('en');
         $child->expects($this->once())->method('getTargetLanguage')->with()->willReturn('de');

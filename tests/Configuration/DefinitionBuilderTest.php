@@ -8,11 +8,13 @@ use CyberSpectrum\I18N\Configuration\Configuration;
 use CyberSpectrum\I18N\Configuration\Definition\Definition;
 use CyberSpectrum\I18N\Configuration\DefinitionBuilder;
 use CyberSpectrum\I18N\Configuration\DefinitionBuilder\DefinitionBuilderInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 
-/** @covers \CyberSpectrum\I18N\Configuration\DefinitionBuilder */
+#[CoversClass(DefinitionBuilder::class)]
+
 class DefinitionBuilderTest extends TestCase
 {
     public function testBuildDictionary(): void
@@ -20,7 +22,7 @@ class DefinitionBuilderTest extends TestCase
         $configuration      = new Configuration();
         $data               = ['type' => 'typeName'];
         $dictionary         = new Definition('dummy');
-        $dictionaryBuilder  = $this->getMockForAbstractClass(DefinitionBuilderInterface::class);
+        $dictionaryBuilder  = $this->getMockBuilder(DefinitionBuilderInterface::class)->getMock();
         $dictionaryBuilders = new ServiceLocator(['typeName' => function () use ($dictionaryBuilder) {
             return $dictionaryBuilder;
         }]);
@@ -52,7 +54,7 @@ class DefinitionBuilderTest extends TestCase
         $configuration      = new Configuration();
         $data               = ['type' => 'typeName'];
         $dictionary         = new Definition('dummy');
-        $jobBuilder         = $this->getMockForAbstractClass(DefinitionBuilderInterface::class);
+        $jobBuilder         = $this->getMockBuilder(DefinitionBuilderInterface::class)->getMock();
         $dictionaryBuilders = new ServiceLocator([]);
         $jobBuilders        = new ServiceLocator(['typeName' => function () use ($jobBuilder) {
             return $jobBuilder;

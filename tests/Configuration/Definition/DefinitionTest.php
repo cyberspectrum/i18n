@@ -6,11 +6,13 @@ namespace CyberSpectrum\I18N\Test\Configuration\Definition;
 
 use CyberSpectrum\I18N\Configuration\Definition\Definition;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 use function iterator_to_array;
 
-/** @covers \CyberSpectrum\I18N\Configuration\Definition\Definition */
+#[CoversClass(Definition::class)]
+
 class DefinitionTest extends TestCase
 {
     public function testInitialization(): void

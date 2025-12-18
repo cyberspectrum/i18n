@@ -12,22 +12,25 @@ use CyberSpectrum\I18N\Exception\DictionaryNotFoundException;
 use CyberSpectrum\I18N\Configuration\Definition\DictionaryDefinition;
 use CyberSpectrum\I18N\DictionaryBuilder\DefaultDictionaryBuilder;
 use CyberSpectrum\I18N\Job\JobFactory;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 use UnexpectedValueException;
 
-/** @covers \CyberSpectrum\I18N\DictionaryBuilder\DefaultDictionaryBuilder */
+#[CoversClass(DefaultDictionaryBuilder::class)]
 class DefaultDictionaryBuilderTest extends TestCase
 {
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetDictionary(): void
     {
-        $provider   = $this->getMockForAbstractClass(DictionaryProviderInterface::class);
+        $provider   = $this->getMockBuilder(DictionaryProviderInterface::class)->getMock();
         $providers  = new ServiceLocator(['test' => function () use ($provider) {
             return $provider;
         }]);
-        $dictionary = $this->getMockForAbstractClass(DictionaryInterface::class);
+        $dictionary = $this->getMockBuilder(DictionaryInterface::class)->getMock();
         $definition = new DictionaryDefinition(
             'test',
             [
@@ -59,9 +62,10 @@ class DefaultDictionaryBuilderTest extends TestCase
         self::assertSame($dictionary, $instance->build($this->mockJobFactory(), $definition));
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetDictionaryThrowsForWriteOnlyProvider(): void
     {
-        $provider   = $this->getMockForAbstractClass(WritableDictionaryProviderInterface::class);
+        $provider   = $this->getMockBuilder(WritableDictionaryProviderInterface::class)->getMock();
         $providers  = new ServiceLocator(['test' => function () use ($provider) {
             return $provider;
         }]);
@@ -82,6 +86,7 @@ class DefaultDictionaryBuilderTest extends TestCase
         $instance->build($this->mockJobFactory(), $definition);
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetDictionaryThrowsForUnknownProvider(): void
     {
         $providers  = new ServiceLocator([]);
@@ -102,9 +107,10 @@ class DefaultDictionaryBuilderTest extends TestCase
         $instance->build($this->mockJobFactory(), $definition);
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetDictionaryForWriteThrowsForReadOnlyProvider(): void
     {
-        $provider   = $this->getMockForAbstractClass(DictionaryProviderInterface::class);
+        $provider   = $this->getMockBuilder(DictionaryProviderInterface::class)->getMock();
         $providers  = new ServiceLocator(['test' => function () use ($provider) {
             return $provider;
         }]);
@@ -125,6 +131,7 @@ class DefaultDictionaryBuilderTest extends TestCase
         $instance->buildWritable($this->mockJobFactory(), $definition);
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetDictionaryForWriteThrowsForUnknownProvider(): void
     {
         $providers  = new ServiceLocator([]);
@@ -145,13 +152,14 @@ class DefaultDictionaryBuilderTest extends TestCase
         $instance->buildWritable($this->mockJobFactory(), $definition);
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetDictionaryForWrite(): void
     {
-        $provider      = $this->getMockForAbstractClass(WritableDictionaryProviderInterface::class);
+        $provider      = $this->getMockBuilder(WritableDictionaryProviderInterface::class)->getMock();
         $providers     = new ServiceLocator(['test' => function () use ($provider) {
             return $provider;
         }]);
-        $dictionary    = $this->getMockForAbstractClass(WritableDictionaryInterface::class);
+        $dictionary    = $this->getMockBuilder(WritableDictionaryInterface::class)->getMock();
         $definition    = new DictionaryDefinition(
             'test',
             [
@@ -182,13 +190,14 @@ class DefaultDictionaryBuilderTest extends TestCase
         self::assertSame($dictionary, $instance->buildWritable($this->mockJobFactory(), $definition));
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetDictionaryForWriteWillCreateNewIfNotFound(): void
     {
-        $provider      = $this->getMockForAbstractClass(WritableDictionaryProviderInterface::class);
+        $provider      = $this->getMockBuilder(WritableDictionaryProviderInterface::class)->getMock();
         $providers     = new ServiceLocator(['test' => function () use ($provider) {
             return $provider;
         }]);
-        $dictionary    = $this->getMockForAbstractClass(WritableDictionaryInterface::class);
+        $dictionary    = $this->getMockBuilder(WritableDictionaryInterface::class)->getMock();
         $definition    = new DictionaryDefinition(
             'test',
             [

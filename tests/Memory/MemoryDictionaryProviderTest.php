@@ -9,12 +9,13 @@ use CyberSpectrum\I18N\Exception\DictionaryNotFoundException;
 use CyberSpectrum\I18N\Memory\MemoryDictionary;
 use CyberSpectrum\I18N\Memory\MemoryDictionaryProvider;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 use function array_map;
 use function iterator_to_array;
 
-/** @covers \CyberSpectrum\I18N\Memory\MemoryDictionaryProvider */
+#[CoversClass(MemoryDictionaryProvider::class)]
 class MemoryDictionaryProviderTest extends TestCase
 {
     public function testIsInitiallyEmpty(): void

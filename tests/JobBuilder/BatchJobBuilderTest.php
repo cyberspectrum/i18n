@@ -12,11 +12,15 @@ use CyberSpectrum\I18N\Job\BatchJob;
 use CyberSpectrum\I18N\Job\JobFactory;
 use CyberSpectrum\I18N\Job\TranslationJobInterface;
 use CyberSpectrum\I18N\JobBuilder\BatchJobBuilder;
+use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-/** @covers \CyberSpectrum\I18N\JobBuilder\BatchJobBuilder */
+#[CoversClass(BatchJobBuilder::class)]
 class BatchJobBuilderTest extends TestCase
 {
+    #[AllowMockObjectsWithoutExpectations]
     public function testBuild(): void
     {
         $builder = $this
@@ -27,11 +31,24 @@ class BatchJobBuilderTest extends TestCase
         $child1 = new Definition('child1');
         $child2 = new Definition('child2');
 
+        $job = $this->getMockBuilder(TranslationJobInterface::class)->getMock();
         $builder
             ->expects($this->exactly(2))
             ->method('createJob')
-            ->withConsecutive([$child1], [$child2])
-            ->willReturn($this->getMockForAbstractClass(TranslationJobInterface::class));
+            ->willReturnCallback(
+                static function ($definition) use ($child1, $child2, $job): TranslationJobInterface {
+                    static $counter = 0;
+                    self::assertSame(
+                        match ($counter++) {
+                            0 => $child1,
+                            1 => $child2,
+                            default => throw new InvalidArgumentException('Invalid definition passed.')
+                        },
+                        $definition
+                    );
+                    return $job;
+                }
+            );
 
         $definition = new BatchJobDefinition('test', [$child1, $child2]);
 
@@ -40,6 +57,7 @@ class BatchJobBuilderTest extends TestCase
         self::assertInstanceOf(BatchJob::class, $instance->build($builder, $definition));
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testBuildUnwrapsReferencedJobs(): void
     {
         $builder = $this
@@ -50,11 +68,24 @@ class BatchJobBuilderTest extends TestCase
         $child1 = new Definition('child1');
         $child2 = new Definition('child2');
 
+        $job = $this->getMockBuilder(TranslationJobInterface::class)->getMock();
         $builder
             ->expects($this->exactly(2))
             ->method('createJob')
-            ->withConsecutive([$child1], [$child2])
-            ->willReturn($this->getMockForAbstractClass(TranslationJobInterface::class));
+            ->willReturnCallback(
+                static function ($definition) use ($child1, $child2, $job): TranslationJobInterface {
+                    static $counter = 0;
+                    self::assertSame(
+                        match ($counter++) {
+                            0 => $child1,
+                            1 => $child2,
+                            default => throw new InvalidArgumentException('Invalid definition passed.')
+                        },
+                        $definition
+                    );
+                    return $job;
+                }
+            );
 
         $configuration = new Configuration();
         $configuration->setJob(new BatchJobDefinition('test', [$child1, $child2]));
@@ -80,7 +111,7 @@ class BatchJobBuilderTest extends TestCase
         $definition = new ReferencedJobDefinition('test', $configuration);
         $instance   = new BatchJobBuilder();
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid definition passed.');
 
         $instance->build($builder, $definition);

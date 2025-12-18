@@ -7,9 +7,10 @@ namespace CyberSpectrum\I18N\Test\Configuration\Definition;
 use CyberSpectrum\I18N\Configuration\Configuration;
 use CyberSpectrum\I18N\Configuration\Definition\DictionaryDefinition;
 use CyberSpectrum\I18N\Configuration\Definition\ExtendedDictionaryDefinition;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-/** @covers \CyberSpectrum\I18N\Configuration\Definition\ExtendedDictionaryDefinition */
+#[CoversClass(ExtendedDictionaryDefinition::class)]
 class ExtendedDictionaryDefinitionTest extends TestCase
 {
     /** Test that the getters are correctly evaluated. */

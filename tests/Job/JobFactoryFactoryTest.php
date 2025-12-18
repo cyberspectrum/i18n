@@ -7,22 +7,21 @@ namespace CyberSpectrum\I18N\Test\Job;
 use CyberSpectrum\I18N\Configuration\Configuration;
 use CyberSpectrum\I18N\Configuration\Definition\Definition;
 use CyberSpectrum\I18N\Job\JobFactoryFactory;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 
-/**
- * This tests the job builder factory.
- *
- * @covers \CyberSpectrum\I18N\Job\JobFactoryFactory
- */
+#[CoversClass(JobFactoryFactory::class)]
 class JobFactoryFactoryTest extends TestCase
 {
+    #[AllowMockObjectsWithoutExpectations]
     public function testCreate(): void
     {
         $providers     = $this->getMockBuilder(ServiceLocator::class)->disableOriginalConstructor()->getMock();
         $jobBuilders   = $this->getMockBuilder(ServiceLocator::class)->disableOriginalConstructor()->getMock();
-        $logger        = $this->getMockForAbstractClass(LoggerInterface::class);
+        $logger        = $this->getMockBuilder(LoggerInterface::class)->getMock();
         $configuration = new Configuration();
         $factory       = new JobFactoryFactory($providers, $jobBuilders, $logger);
 

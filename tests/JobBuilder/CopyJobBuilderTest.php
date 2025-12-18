@@ -15,11 +15,15 @@ use CyberSpectrum\I18N\Job\CopyDictionaryJob;
 use CyberSpectrum\I18N\Job\JobFactory;
 use CyberSpectrum\I18N\JobBuilder\CopyJobBuilder;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-/** @covers \CyberSpectrum\I18N\JobBuilder\CopyJobBuilder */
+#[CoversClass(CopyJobBuilder::class)]
 class CopyJobBuilderTest extends TestCase
 {
+    #[AllowMockObjectsWithoutExpectations]
     public function testBuild(): void
     {
         $builder = $this
@@ -34,12 +38,12 @@ class CopyJobBuilderTest extends TestCase
             ->expects($this->once())
             ->method('createDictionary')
             ->with($source)
-            ->willReturn($this->getMockForAbstractClass(DictionaryInterface::class));
+            ->willReturn($this->getMockBuilder(DictionaryInterface::class)->getMock());
         $builder
             ->expects($this->once())
             ->method('createWritableDictionary')
             ->with($target)
-            ->willReturn($this->getMockForAbstractClass(WritableDictionaryInterface::class));
+            ->willReturn($this->getMockBuilder(WritableDictionaryInterface::class)->getMock());
 
         $definition = new CopyJobDefinition('test', $source, $target);
 
@@ -53,6 +57,7 @@ class CopyJobBuilderTest extends TestCase
         self::assertFalse($job->isDryRun());
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testBuildWithOverrides(): void
     {
         $builder = $this
@@ -67,12 +72,12 @@ class CopyJobBuilderTest extends TestCase
             ->expects($this->once())
             ->method('createDictionary')
             ->with($source)
-            ->willReturn($this->getMockForAbstractClass(DictionaryInterface::class));
+            ->willReturn($this->getMockBuilder(DictionaryInterface::class)->getMock());
         $builder
             ->expects($this->once())
             ->method('createWritableDictionary')
             ->with($target)
-            ->willReturn($this->getMockForAbstractClass(WritableDictionaryInterface::class));
+            ->willReturn($this->getMockBuilder(WritableDictionaryInterface::class)->getMock());
 
         $definition = new CopyJobDefinition('test', $source, $target, [
             'copy-source'    => true,
@@ -90,6 +95,7 @@ class CopyJobBuilderTest extends TestCase
         self::assertFalse($job->isDryRun());
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testBuildUnwrapsReferencedJobs(): void
     {
         $builder = $this
@@ -104,12 +110,12 @@ class CopyJobBuilderTest extends TestCase
             ->expects($this->once())
             ->method('createDictionary')
             ->with($source)
-            ->willReturn($this->getMockForAbstractClass(DictionaryInterface::class));
+            ->willReturn($this->getMockBuilder(DictionaryInterface::class)->getMock());
         $builder
             ->expects($this->once())
             ->method('createWritableDictionary')
             ->with($target)
-            ->willReturn($this->getMockForAbstractClass(WritableDictionaryInterface::class));
+            ->willReturn($this->getMockBuilder(WritableDictionaryInterface::class)->getMock());
 
         $configuration = new Configuration();
         $configuration->setJob(new CopyJobDefinition('test', $source, $target, [
@@ -153,7 +159,7 @@ class CopyJobBuilderTest extends TestCase
     /**
      * Data provider for the flag conversion test.
      */
-    public function stringToFlagProvider(): array
+    public static function stringToFlagProvider(): array
     {
         return [
             [CopyDictionaryJob::COPY, 'true'],
@@ -171,9 +177,9 @@ class CopyJobBuilderTest extends TestCase
      *
      * @param int   $expected The expected result.
      * @param mixed $input    The input value.
-     *
-     * @dataProvider stringToFlagProvider
      */
+    #[DataProvider('stringToFlagProvider')]
+    #[AllowMockObjectsWithoutExpectations]
     public function testStringToFlag(int $expected, $input): void
     {
         $builder = $this
@@ -188,12 +194,12 @@ class CopyJobBuilderTest extends TestCase
             ->expects($this->once())
             ->method('createDictionary')
             ->with($source)
-            ->willReturn($this->getMockForAbstractClass(DictionaryInterface::class));
+            ->willReturn($this->getMockBuilder(DictionaryInterface::class)->getMock());
         $builder
             ->expects($this->once())
             ->method('createWritableDictionary')
             ->with($target)
-            ->willReturn($this->getMockForAbstractClass(WritableDictionaryInterface::class));
+            ->willReturn($this->getMockBuilder(WritableDictionaryInterface::class)->getMock());
 
         $definition = new CopyJobDefinition('test', $source, $target, ['copy-source' => $input]);
 
@@ -204,7 +210,7 @@ class CopyJobBuilderTest extends TestCase
         self::assertSame($expected, $job->getCopySource());
     }
 
-    /** @dataProvider stringToFlagProvider */
+    #[AllowMockObjectsWithoutExpectations]
     public function testInvalidStringToFlagThrows(): void
     {
         $builder = $this
@@ -219,12 +225,12 @@ class CopyJobBuilderTest extends TestCase
             ->expects($this->once())
             ->method('createDictionary')
             ->with($source)
-            ->willReturn($this->getMockForAbstractClass(DictionaryInterface::class));
+            ->willReturn($this->getMockBuilder(DictionaryInterface::class)->getMock());
         $builder
             ->expects($this->once())
             ->method('createWritableDictionary')
             ->with($target)
-            ->willReturn($this->getMockForAbstractClass(WritableDictionaryInterface::class));
+            ->willReturn($this->getMockBuilder(WritableDictionaryInterface::class)->getMock());
 
         $definition = new CopyJobDefinition('test', $source, $target, ['copy-source' => 'invalid']);
 
@@ -237,7 +243,7 @@ class CopyJobBuilderTest extends TestCase
     }
 
     /** Data provider for the flag conversion test. */
-    public function boolishToFlagProvider(): array
+    public static function boolishToFlagProvider(): array
     {
         return [
             [true, 'true'],
@@ -254,9 +260,9 @@ class CopyJobBuilderTest extends TestCase
      *
      * @param bool  $expected The expected result.
      * @param mixed $input    The input value.
-     *
-     * @dataProvider boolishToFlagProvider
      */
+    #[DataProvider('boolishToFlagProvider')]
+    #[AllowMockObjectsWithoutExpectations]
     public function testBoolishToFlag(bool $expected, $input): void
     {
         $builder = $this
@@ -271,12 +277,12 @@ class CopyJobBuilderTest extends TestCase
             ->expects($this->once())
             ->method('createDictionary')
             ->with($source)
-            ->willReturn($this->getMockForAbstractClass(DictionaryInterface::class));
+            ->willReturn($this->getMockBuilder(DictionaryInterface::class)->getMock());
         $builder
             ->expects($this->once())
             ->method('createWritableDictionary')
             ->with($target)
-            ->willReturn($this->getMockForAbstractClass(WritableDictionaryInterface::class));
+            ->willReturn($this->getMockBuilder(WritableDictionaryInterface::class)->getMock());
 
         $definition = new CopyJobDefinition('test', $source, $target, ['remove-obsolete' => $input]);
 
@@ -287,7 +293,7 @@ class CopyJobBuilderTest extends TestCase
         self::assertSame($expected, $job->hasRemoveObsolete());
     }
 
-    /** @dataProvider stringToFlagProvider */
+    #[AllowMockObjectsWithoutExpectations]
     public function testInvalidSBoolishToFlagThrows(): void
     {
         $builder = $this
@@ -302,12 +308,12 @@ class CopyJobBuilderTest extends TestCase
             ->expects($this->once())
             ->method('createDictionary')
             ->with($source)
-            ->willReturn($this->getMockForAbstractClass(DictionaryInterface::class));
+            ->willReturn($this->getMockBuilder(DictionaryInterface::class)->getMock());
         $builder
             ->expects($this->once())
             ->method('createWritableDictionary')
             ->with($target)
-            ->willReturn($this->getMockForAbstractClass(WritableDictionaryInterface::class));
+            ->willReturn($this->getMockBuilder(WritableDictionaryInterface::class)->getMock());
 
         $definition = new CopyJobDefinition('test', $source, $target, ['remove-obsolete' => 'invalid']);
 

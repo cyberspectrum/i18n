@@ -7,9 +7,10 @@ namespace CyberSpectrum\I18N\Test\Configuration\DefinitionBuilder;
 use CyberSpectrum\I18N\Configuration\Configuration;
 use CyberSpectrum\I18N\Configuration\Definition\DictionaryDefinition;
 use CyberSpectrum\I18N\Configuration\DefinitionBuilder\MemoryDictionaryDefinitionBuilder;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-/** @covers \CyberSpectrum\I18N\Configuration\DefinitionBuilder\MemoryDictionaryDefinitionBuilder */
+#[CoversClass(MemoryDictionaryDefinitionBuilder::class)]
 class MemoryDictionaryDefinitionBuilderTest extends TestCase
 {
     public function testBuilding(): void

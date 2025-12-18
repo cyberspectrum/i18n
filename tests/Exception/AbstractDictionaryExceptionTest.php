@@ -6,20 +6,24 @@ namespace CyberSpectrum\I18N\Test\Exception;
 
 use CyberSpectrum\I18N\Dictionary\DictionaryInterface;
 use CyberSpectrum\I18N\Exception\AbstractDictionaryException;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
-/** @covers \CyberSpectrum\I18N\Exception\AbstractDictionaryException */
+#[CoversClass(AbstractDictionaryException::class)]
 class AbstractDictionaryExceptionTest extends TestCase
 {
+    #[AllowMockObjectsWithoutExpectations]
     public function testSetsValues(): void
     {
         $previous   = new RuntimeException();
-        $dictionary = $this->getMockForAbstractClass(DictionaryInterface::class);
-        $exception  = $this->getMockForAbstractClass(
-            AbstractDictionaryException::class,
-            [$dictionary, 'message', 23, $previous]
-        );
+        $dictionary = $this->getMockBuilder(DictionaryInterface::class)->getMock();
+        $exception  = $this
+            ->getMockBuilder(AbstractDictionaryException::class)
+            ->setConstructorArgs([$dictionary, 'message', 23, $previous])
+            ->onlyMethods([])
+            ->getMock();
 
         self::assertSame($dictionary, $exception->getDictionary());
         self::assertSame('message', $exception->getMessage());

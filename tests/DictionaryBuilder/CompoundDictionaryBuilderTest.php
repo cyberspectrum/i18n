@@ -12,18 +12,21 @@ use CyberSpectrum\I18N\Dictionary\WritableDictionaryInterface;
 use CyberSpectrum\I18N\DictionaryBuilder\CompoundDictionaryBuilder;
 use CyberSpectrum\I18N\Job\JobFactory;
 use Generator;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 use function iterator_to_array;
 
-/** @covers \CyberSpectrum\I18N\DictionaryBuilder\CompoundDictionaryBuilder */
+#[CoversClass(CompoundDictionaryBuilder::class)]
 class CompoundDictionaryBuilderTest extends TestCase
 {
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetDictionary(): void
     {
         $factory         = $this->mockJobFactory();
-        $this->getMockForAbstractClass(DictionaryInterface::class);
+        $this->getMockBuilder(DictionaryInterface::class)->getMock();
         $childDefinition = new DictionaryDefinition(
             'child',
             [
@@ -41,7 +44,7 @@ class CompoundDictionaryBuilderTest extends TestCase
             ]
         );
 
-        $childDictionary = $this->getMockForAbstractClass(DictionaryInterface::class);
+        $childDictionary = $this->getMockBuilder(DictionaryInterface::class)->getMock();
         $childDictionary->expects($this->once())->method('getSourceLanguage')->willReturn('en');
         $childDictionary->expects($this->once())->method('getTargetLanguage')->willReturn('de');
         $childDictionary->expects($this->once())->method('keys')->willReturn($this->arrayAsGenerator(['key']));
@@ -85,7 +88,7 @@ class CompoundDictionaryBuilderTest extends TestCase
             ]
         );
 
-        $childDictionary = $this->getMockForAbstractClass(WritableDictionaryInterface::class);
+        $childDictionary = $this->getMockBuilder(WritableDictionaryInterface::class)->getMock();
         $childDictionary->expects($this->once())->method('getSourceLanguage')->willReturn('en');
         $childDictionary->expects($this->once())->method('getTargetLanguage')->willReturn('de');
 

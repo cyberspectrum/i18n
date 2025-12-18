@@ -9,10 +9,11 @@ use CyberSpectrum\I18N\Compound\WritableTranslationValue;
 use CyberSpectrum\I18N\Dictionary\WritableDictionaryInterface;
 use CyberSpectrum\I18N\Exception\NotSupportedException;
 use CyberSpectrum\I18N\TranslationValue\WritableTranslationValueInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
-/** @covers \CyberSpectrum\I18N\Compound\WritableCompoundDictionary */
+#[CoversClass(WritableCompoundDictionary::class)]
 class WritableCompoundDictionaryTest extends TestCase
 {
     public function testLanguages(): void
@@ -27,7 +28,7 @@ class WritableCompoundDictionaryTest extends TestCase
     {
         $compound = new WritableCompoundDictionary('en', 'de');
 
-        $child = $this->getMockForAbstractClass(WritableDictionaryInterface::class);
+        $child = $this->getMockBuilder(WritableDictionaryInterface::class)->getMock();
         $child->expects($this->once())->method('getSourceLanguage')->with()->willReturn('de');
 
         $this->expectException(NotSupportedException::class);
@@ -40,7 +41,7 @@ class WritableCompoundDictionaryTest extends TestCase
     {
         $compound = new WritableCompoundDictionary('en', 'fr');
 
-        $child = $this->getMockForAbstractClass(WritableDictionaryInterface::class);
+        $child = $this->getMockBuilder(WritableDictionaryInterface::class)->getMock();
         $child->expects($this->once())->method('getSourceLanguage')->with()->willReturn('en');
         $child->expects($this->once())->method('getTargetLanguage')->with()->willReturn('de');
 
@@ -54,13 +55,13 @@ class WritableCompoundDictionaryTest extends TestCase
     {
         $compound = new WritableCompoundDictionary('en', 'de');
 
-        $child = $this->getMockForAbstractClass(WritableDictionaryInterface::class);
+        $child = $this->getMockBuilder(WritableDictionaryInterface::class)->getMock();
         $child->expects($this->once())->method('getSourceLanguage')->with()->willReturn('en');
         $child->expects($this->once())->method('getTargetLanguage')->with()->willReturn('de');
 
         $compound->addDictionary('child', $child);
 
-        $child2 = $this->getMockForAbstractClass(WritableDictionaryInterface::class);
+        $child2 = $this->getMockBuilder(WritableDictionaryInterface::class)->getMock();
         $child2->expects($this->never())->method('getSourceLanguage');
         $child2->expects($this->never())->method('getTargetLanguage');
 
@@ -72,10 +73,10 @@ class WritableCompoundDictionaryTest extends TestCase
 
     public function testAdd(): void
     {
-        $value = $this->getMockForAbstractClass(WritableTranslationValueInterface::class);
+        $value = $this->getMockBuilder(WritableTranslationValueInterface::class)->getMock();
         $value->expects($this->once())->method('getKey')->with()->willReturn('key');
 
-        $child = $this->getMockForAbstractClass(WritableDictionaryInterface::class);
+        $child = $this->getMockBuilder(WritableDictionaryInterface::class)->getMock();
         $child->expects($this->once())->method('getSourceLanguage')->with()->willReturn('en');
         $child->expects($this->once())->method('getTargetLanguage')->with()->willReturn('de');
         $child->expects($this->once())->method('add')->with('key')->willReturn($value);
@@ -89,7 +90,7 @@ class WritableCompoundDictionaryTest extends TestCase
 
     public function testRemove(): void
     {
-        $child = $this->getMockForAbstractClass(WritableDictionaryInterface::class);
+        $child = $this->getMockBuilder(WritableDictionaryInterface::class)->getMock();
         $child->expects($this->once())->method('getSourceLanguage')->with()->willReturn('en');
         $child->expects($this->once())->method('getTargetLanguage')->with()->willReturn('de');
         $child->expects($this->once())->method('remove')->with('key');
@@ -102,10 +103,10 @@ class WritableCompoundDictionaryTest extends TestCase
 
     public function testGetWritable(): void
     {
-        $value = $this->getMockForAbstractClass(WritableTranslationValueInterface::class);
+        $value = $this->getMockBuilder(WritableTranslationValueInterface::class)->getMock();
         $value->expects($this->once())->method('getKey')->with()->willReturn('key');
 
-        $child = $this->getMockForAbstractClass(WritableDictionaryInterface::class);
+        $child = $this->getMockBuilder(WritableDictionaryInterface::class)->getMock();
         $child->expects($this->once())->method('getSourceLanguage')->with()->willReturn('en');
         $child->expects($this->once())->method('getTargetLanguage')->with()->willReturn('de');
         $child->expects($this->once())->method('getWritable')->with('key')->willReturn($value);

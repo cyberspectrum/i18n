@@ -10,12 +10,15 @@ use CyberSpectrum\I18N\Configuration\Definition\ExtendedDictionaryDefinition;
 use CyberSpectrum\I18N\Configuration\DefinitionBuilder;
 use CyberSpectrum\I18N\Configuration\DefinitionBuilder\CompoundDictionaryDefinitionBuilder;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-/** @covers \CyberSpectrum\I18N\Configuration\DefinitionBuilder\CompoundDictionaryDefinitionBuilder */
+#[CoversClass(CompoundDictionaryDefinitionBuilder::class)]
 class CompoundDictionaryDefinitionBuilderTest extends TestCase
 {
-    public function throwsForMissingKeyProvider(): array
+    public static function throwsForMissingKeyProvider(): array
     {
         return [
             'name'   => ['name', []],
@@ -23,14 +26,9 @@ class CompoundDictionaryDefinitionBuilderTest extends TestCase
         ];
     }
 
-    /**
-     * Test that building throws when key is missing.
-     *
-     * @param string $key The key to expect.
-     * @param array  $data
-     *
-     * @dataProvider throwsForMissingKeyProvider
-     */
+    /** Test that building throws when key is missing. */
+    #[DataProvider('throwsForMissingKeyProvider')]
+    #[AllowMockObjectsWithoutExpectations]
     public function testThrowsForMissingKey(string $key, array $data): void
     {
         $builder = new CompoundDictionaryDefinitionBuilder(
@@ -59,7 +57,7 @@ class CompoundDictionaryDefinitionBuilderTest extends TestCase
         $configuration->setDictionary(new DictionaryDefinition('base-dict1'));
         $configuration->setDictionary(new DictionaryDefinition('base-dict2'));
 
-        $builder = new DefinitionBuilder\CompoundDictionaryDefinitionBuilder($definitionBuilder);
+        $builder = new CompoundDictionaryDefinitionBuilder($definitionBuilder);
 
         $dictionary = $builder->build($configuration, [
             'type'   => 'compound',

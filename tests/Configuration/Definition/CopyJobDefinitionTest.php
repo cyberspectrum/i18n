@@ -6,9 +6,10 @@ namespace CyberSpectrum\I18N\Test\Configuration\Definition;
 
 use CyberSpectrum\I18N\Configuration\Definition\CopyJobDefinition;
 use CyberSpectrum\I18N\Configuration\Definition\DictionaryDefinition;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-/** @covers \CyberSpectrum\I18N\Configuration\Definition\CopyJobDefinition */
+#[CoversClass(CopyJobDefinition::class)]
 class CopyJobDefinitionTest extends TestCase
 {
     public function testAllIsWorking(): void

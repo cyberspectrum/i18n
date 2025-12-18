@@ -12,12 +12,14 @@ use CyberSpectrum\I18N\Configuration\Definition\ReferencedJobDefinition;
 use CyberSpectrum\I18N\Configuration\DefinitionBuilder;
 use CyberSpectrum\I18N\Configuration\DefinitionBuilder\BatchJobDefinitionBuilder;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-/** @covers \CyberSpectrum\I18N\Configuration\DefinitionBuilder\BatchJobDefinitionBuilder */
+#[CoversClass(BatchJobDefinitionBuilder::class)]
 class BatchJobDefinitionBuilderTest extends TestCase
 {
-    public function throwsForMissingKeyProvider(): array
+    public static function throwsForMissingKeyProvider(): array
     {
         return [
             'name'   => ['name', []],
@@ -30,14 +32,17 @@ class BatchJobDefinitionBuilderTest extends TestCase
      *
      * @param string $key The key to expect.
      * @param array  $data
-     *
-     * @dataProvider throwsForMissingKeyProvider
      */
+    #[DataProvider('throwsForMissingKeyProvider')]
     public function testThrowsForMissingKey(string $key, array $data): void
     {
-        $builder = new BatchJobDefinitionBuilder(
-            $this->getMockBuilder(DefinitionBuilder::class)->disableOriginalConstructor()->getMock()
-        );
+        $definitionBuilder = $this
+            ->getMockBuilder(DefinitionBuilder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $definitionBuilder->expects($this->never())->method('buildDictionary');
+        $definitionBuilder->expects($this->never())->method('buildJob');
+        $builder = new BatchJobDefinitionBuilder($definitionBuilder);
 
         $configuration = new Configuration();
 
@@ -52,8 +57,8 @@ class BatchJobDefinitionBuilderTest extends TestCase
         $definitionBuilder = $this
             ->getMockBuilder(DefinitionBuilder::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['buildJob'])
             ->getMock();
+        $definitionBuilder->expects($this->never())->method('buildDictionary');
         $definitionBuilder->expects($this->never())->method('buildJob');
 
         $builder = new BatchJobDefinitionBuilder($definitionBuilder);
@@ -72,7 +77,6 @@ class BatchJobDefinitionBuilderTest extends TestCase
         ]);
 
         self::assertInstanceOf(BatchJobDefinition::class, $job);
-        /** @var BatchJobDefinition $job */
         self::assertCount(2, $jobs = $job->getJobs());
         /** @var list<ReferencedJobDefinition> $jobs */
         self::assertInstanceOf(ReferencedJobDefinition::class, $jobs[0]);
@@ -106,7 +110,6 @@ class BatchJobDefinitionBuilderTest extends TestCase
         ]);
 
         self::assertInstanceOf(BatchJobDefinition::class, $job);
-        /** @var BatchJobDefinition $job */
         self::assertCount(1, $jobs = $job->getJobs());
         self::assertSame($inline, $jobs[0]);
     }

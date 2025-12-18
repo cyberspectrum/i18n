@@ -6,15 +6,18 @@ namespace CyberSpectrum\I18N\Test\Exception;
 
 use CyberSpectrum\I18N\Dictionary\DictionaryInterface;
 use CyberSpectrum\I18N\Exception\TranslationAlreadyContainedException;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-/** @covers \CyberSpectrum\I18N\Exception\TranslationAlreadyContainedException */
+#[CoversClass(TranslationAlreadyContainedException::class)]
 class TranslationAlreadyContainedExceptionTest extends TestCase
 {
+    #[AllowMockObjectsWithoutExpectations]
     public function testSetsValues(): void
     {
         $previous   = new \RuntimeException();
-        $dictionary = $this->getMockForAbstractClass(DictionaryInterface::class);
+        $dictionary = $this->getMockBuilder(DictionaryInterface::class)->getMock();
         $exception  = new TranslationAlreadyContainedException('key', $dictionary, $previous);
 
         self::assertSame('key', $exception->getKey());

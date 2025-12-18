@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace CyberSpectrum\I18N\Test\Configuration\Definition;
 
 use CyberSpectrum\I18N\Configuration\Definition\Definition;
+use CyberSpectrum\I18N\Configuration\Definition\ExtendedDefinitionTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 use function iterator_to_array;
 
-/** @covers \CyberSpectrum\I18N\Configuration\Definition\ExtendedDefinitionTrait */
+#[CoversClass(ExtendedDefinitionTrait::class)]
 class ExtendedDefinitionTraitTest extends TestCase
 {
     public function testInitialization(): void

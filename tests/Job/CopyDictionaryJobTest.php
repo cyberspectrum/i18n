@@ -6,13 +6,16 @@ namespace CyberSpectrum\I18N\Test\Job;
 
 use CyberSpectrum\I18N\Memory\MemoryDictionary;
 use CyberSpectrum\I18N\Job\CopyDictionaryJob;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
-/** @covers \CyberSpectrum\I18N\Job\CopyDictionaryJob */
+#[CoversClass(CopyDictionaryJob::class)]
 class CopyDictionaryJobTest extends TestCase
 {
+    #[AllowMockObjectsWithoutExpectations]
     public function testCopyBoth(): void
     {
         $sourceDictionary = new MemoryDictionary('en', 'de', [
@@ -47,6 +50,7 @@ class CopyDictionaryJobTest extends TestCase
         self::assertSame('Target 2', $reader->getTarget());
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testCopySource(): void
     {
         $sourceDictionary = new MemoryDictionary('en', 'de', [
@@ -81,6 +85,7 @@ class CopyDictionaryJobTest extends TestCase
         self::assertNull($reader->getTarget());
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testCopyTarget(): void
     {
         $sourceDictionary = new MemoryDictionary('en', 'de', [
@@ -115,6 +120,7 @@ class CopyDictionaryJobTest extends TestCase
         self::assertSame('Target 2', $reader->getTarget());
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testCopyIfEmpty(): void
     {
         $sourceDictionary = new MemoryDictionary('en', 'de', [
@@ -161,6 +167,7 @@ class CopyDictionaryJobTest extends TestCase
         self::assertSame('Target 3', $reader->getTarget());
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testRemoveObsolete(): void
     {
         $sourceDictionary = new MemoryDictionary('en', 'de', [
@@ -194,6 +201,7 @@ class CopyDictionaryJobTest extends TestCase
         self::assertFalse($targetDictionary->has('test-key2'));
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testDryRunDoesNothing(): void
     {
         $sourceDictionary = new MemoryDictionary('en', 'de', [
@@ -241,6 +249,6 @@ class CopyDictionaryJobTest extends TestCase
      */
     private function mockLogger()
     {
-        return $this->getMockForAbstractClass(LoggerInterface::class);
+        return $this->getMockBuilder(LoggerInterface::class)->getMock();
     }
 }

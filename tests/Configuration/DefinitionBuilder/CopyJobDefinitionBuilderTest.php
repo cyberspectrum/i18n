@@ -10,12 +10,14 @@ use CyberSpectrum\I18N\Configuration\Definition\ExtendedDictionaryDefinition;
 use CyberSpectrum\I18N\Configuration\Definition\CopyJobDefinition;
 use CyberSpectrum\I18N\Configuration\DefinitionBuilder\CopyJobDefinitionBuilder;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-/** @covers \CyberSpectrum\I18N\Configuration\DefinitionBuilder\CopyJobDefinitionBuilder */
+#[CoversClass(CopyJobDefinitionBuilder::class)]
 class CopyJobDefinitionBuilderTest extends TestCase
 {
-    public function throwsForMissingKeyProvider(): array
+    public static function throwsForMissingKeyProvider(): array
     {
         return [
             'name'   => ['name', []],
@@ -29,9 +31,8 @@ class CopyJobDefinitionBuilderTest extends TestCase
      *
      * @param string $key The key to expect.
      * @param array  $data
-     *
-     * @dataProvider throwsForMissingKeyProvider
      */
+    #[DataProvider('throwsForMissingKeyProvider')]
     public function testThrowsForMissingKey(string $key, array $data): void
     {
         $builder = new CopyJobDefinitionBuilder();
@@ -61,7 +62,6 @@ class CopyJobDefinitionBuilderTest extends TestCase
         ]);
 
         self::assertInstanceOf(CopyJobDefinition::class, $job);
-        /** @var CopyJobDefinition $job */
         self::assertSame(['type'   => 'copy','additional_value' => 'foo'], $job->getData());
         self::assertInstanceOf(ExtendedDictionaryDefinition::class, $source = $job->getSource());
         self::assertSame('source', $source->getName());
@@ -88,7 +88,6 @@ class CopyJobDefinitionBuilderTest extends TestCase
         ]);
 
         self::assertInstanceOf(CopyJobDefinition::class, $job);
-        /** @var CopyJobDefinition $job */
         self::assertSame(['type'   => 'copy','additional_value' => 'foo'], $job->getData());
         self::assertInstanceOf(ExtendedDictionaryDefinition::class, $source = $job->getSource());
         self::assertSame('source', $source->getName());
@@ -116,7 +115,6 @@ class CopyJobDefinitionBuilderTest extends TestCase
         ]);
 
         self::assertInstanceOf(CopyJobDefinition::class, $job);
-        /** @var CopyJobDefinition $job */
         $source = $job->getSource();
         $target = $job->getTarget();
 

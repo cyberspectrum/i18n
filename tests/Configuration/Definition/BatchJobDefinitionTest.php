@@ -6,9 +6,10 @@ namespace CyberSpectrum\I18N\Test\Configuration\Definition;
 
 use CyberSpectrum\I18N\Configuration\Definition\BatchJobDefinition;
 use CyberSpectrum\I18N\Configuration\Definition\Definition;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-/** @covers \CyberSpectrum\I18N\Configuration\Definition\BatchJobDefinition */
+#[CoversClass(BatchJobDefinition::class)]
 class BatchJobDefinitionTest extends TestCase
 {
     public function testAllIsWorking(): void

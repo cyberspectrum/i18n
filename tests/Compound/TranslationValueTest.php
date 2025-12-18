@@ -6,14 +6,15 @@ namespace CyberSpectrum\I18N\Test\Compound;
 
 use CyberSpectrum\I18N\Compound\TranslationValue;
 use CyberSpectrum\I18N\TranslationValue\TranslationValueInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-/** @covers \CyberSpectrum\I18N\Compound\TranslationValue */
+#[CoversClass(TranslationValue::class)]
 class TranslationValueTest extends TestCase
 {
     public function testDelegates(): void
     {
-        $value = $this->getMockForAbstractClass(TranslationValueInterface::class);
+        $value = $this->getMockBuilder(TranslationValueInterface::class)->getMock();
         $value->expects($this->once())->method('getKey')->with()->willReturn('key');
         $value->expects($this->once())->method('getSource')->with()->willReturn('source');
         $value->expects($this->once())->method('getTarget')->with()->willReturn('target');

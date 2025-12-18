@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace CyberSpectrum\I18N\Test\Memory;
 
 use CyberSpectrum\I18N\Memory\MemoryTranslationValue;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-/** @covers \CyberSpectrum\I18N\Memory\MemoryTranslationValue */
+#[CoversClass(MemoryTranslationValue::class)]
 class MemoryTranslationValueTest extends TestCase
 {
     public function testEmptyValue(): void

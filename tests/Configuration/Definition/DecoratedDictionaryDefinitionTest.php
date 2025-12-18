@@ -6,10 +6,11 @@ namespace CyberSpectrum\I18N\Test\Configuration\Definition;
 
 use CyberSpectrum\I18N\Configuration\Definition\DecoratedDictionaryDefinition;
 use CyberSpectrum\I18N\Configuration\Definition\DictionaryDefinition;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
-/** @covers \CyberSpectrum\I18N\Configuration\Definition\DecoratedDictionaryDefinition */
+#[CoversClass(DecoratedDictionaryDefinition::class)]
 class DecoratedDictionaryDefinitionTest extends TestCase
 {
     /** Test that the getters are correctly evaluated. */

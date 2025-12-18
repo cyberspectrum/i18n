@@ -7,9 +7,10 @@ namespace CyberSpectrum\I18N\Test\Configuration;
 use CyberSpectrum\I18N\Configuration\Configuration;
 use CyberSpectrum\I18N\Configuration\Definition\Definition;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-/** @covers \CyberSpectrum\I18N\Configuration\Configuration */
+#[CoversClass(Configuration::class)]
 class ConfigurationTest extends TestCase
 {
     public function testEmpty(): void

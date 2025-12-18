@@ -6,16 +6,17 @@ namespace CyberSpectrum\I18N\Test\Job;
 
 use CyberSpectrum\I18N\Job\BatchJob;
 use CyberSpectrum\I18N\Job\TranslationJobInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-/** @covers \CyberSpectrum\I18N\Job\BatchJob */
+#[CoversClass(BatchJob::class)]
 class BatchJobTest extends TestCase
 {
     public function testDryRun(): void
     {
         $batch = new BatchJob([
-            'child1' => $child1 = $this->getMockForAbstractClass(TranslationJobInterface::class),
-            'child2' => $child2 = $this->getMockForAbstractClass(TranslationJobInterface::class),
+            'child1' => $child1 = $this->getMockBuilder(TranslationJobInterface::class)->getMock(),
+            'child2' => $child2 = $this->getMockBuilder(TranslationJobInterface::class)->getMock(),
         ]);
 
         $child1->expects($this->once())->method('run')->with(true);
@@ -27,8 +28,8 @@ class BatchJobTest extends TestCase
     public function testNoDryRun(): void
     {
         $batch = new BatchJob([
-            'child1' => $child1 = $this->getMockForAbstractClass(TranslationJobInterface::class),
-            'child2' => $child2 = $this->getMockForAbstractClass(TranslationJobInterface::class),
+            'child1' => $child1 = $this->getMockBuilder(TranslationJobInterface::class)->getMock(),
+            'child2' => $child2 = $this->getMockBuilder(TranslationJobInterface::class)->getMock(),
         ]);
 
         $child1->expects($this->once())->method('run')->with(false);
@@ -40,8 +41,8 @@ class BatchJobTest extends TestCase
     public function testDefaultRun(): void
     {
         $batch = new BatchJob([
-            'child1' => $child1 = $this->getMockForAbstractClass(TranslationJobInterface::class),
-            'child2' => $child2 = $this->getMockForAbstractClass(TranslationJobInterface::class),
+            'child1' => $child1 = $this->getMockBuilder(TranslationJobInterface::class)->getMock(),
+            'child2' => $child2 = $this->getMockBuilder(TranslationJobInterface::class)->getMock(),
         ]);
 
         $child1->expects($this->once())->method('run')->with(null);

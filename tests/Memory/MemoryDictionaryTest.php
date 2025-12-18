@@ -9,12 +9,13 @@ use CyberSpectrum\I18N\Exception\TranslationNotFoundException;
 use CyberSpectrum\I18N\Memory\MemoryDictionary;
 use CyberSpectrum\I18N\Memory\MemoryTranslationValue;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 use function iterator_to_array;
 use function var_export;
 
-/** @covers \CyberSpectrum\I18N\Memory\MemoryDictionary */
+#[CoversClass(MemoryDictionary::class)]
 class MemoryDictionaryTest extends TestCase
 {
     public function testInstantiation(): void
