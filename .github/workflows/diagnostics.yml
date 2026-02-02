@@ -65,6 +65,16 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
 
+      - name: PHP ${{ matrix.php }} Cache phpcq directory
+        uses: actions/cache@v5
+        env:
+          cache-name: phpcq-dir-${{ matrix.php }}
+        with:
+          path: |
+            .phpcq/gnupg/
+            .phpcq/plugins/
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.phpcq_install }}-${{ matrix.phpcq_flags }}-${{ matrix.composer_install }}
+
       - name: PHP ${{ matrix.php }} Install composer dependencies
         run: composer ${{ matrix.composer_install }} --prefer-stable --no-interaction --no-progress
 
